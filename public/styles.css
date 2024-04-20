@@ -161,4 +161,5 @@ a {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     z-index: 1000;
+    font-size: 24px;
 }

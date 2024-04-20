@@ -129,6 +129,7 @@ app.post("/sign-in", (req, res) => {
     console.log(users[username]['signedIn']);
     users[username]['signedIn'] = true;
     console.log(users[username]['signedIn']);
+    fs.writeFileSync("./data/users.json", JSON.stringify(users, null, " "));
 
     // G. Sending a success response with the user account
     //
@@ -147,10 +148,6 @@ app.get("/sign-out", (req, res) => {
     //
     // Deleting req.session.user
     //
-    const users = JSON.parse(fs.readFileSync("./data/users.json"));
-
-    console.log("signout", req.session.user);
-    console.log(users[req.session.user]);
     delete req.session.user;
 
     //
@@ -160,7 +157,6 @@ app.get("/sign-out", (req, res) => {
         status: "success",
     })
 
-    user_number -= 1;
 
     return;
 });
@@ -190,11 +186,8 @@ let rooms = {};
 // listen to "connection" emitted by socket io. immediate connection event when client connected
 io.on("connection", (socket) => {
     console.log('A user connected:', socket.id);
+    const session = socket.request.session;
 
-    // Access session variables
-    if (socket.handshake.session) {
-        console.log("Session data:", socket.handshake.session);
-    }
 
     socket.on('enter queue', () => {
         console.log("player entered queue:", socket.id);
@@ -225,15 +218,22 @@ io.on("connection", (socket) => {
             socket.leave(room);
             io.to(room).emit('player disconnected', `Player ${socket.id} has left the game.`);
             console.log(`Player ${socket.id} disconnected from room ${room}`);
-            
             // Clean up the room and reset game state if needed
             io.socketsLeave(room);
         }
+        disconnectCleanUp(session.user.username);
         console.log('User disconnected:', socket.id);
     });
     
 
 })
+
+function disconnectCleanUp(username) {
+    const users = JSON.parse(fs.readFileSync("./data/users.json"));
+    users[username]['signedIn'] = false;
+    fs.writeFileSync("./data/users.json", JSON.stringify(users, null, " "));
+    user_number -= 1;
+}
 
 // Use a web server to listen at port 8000
 // Previous HTTP communication
