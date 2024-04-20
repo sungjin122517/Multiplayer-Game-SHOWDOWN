@@ -24,6 +24,8 @@ function containWordCharsOnly(text) {
     return /^\w+$/.test(text);
 }
 
+let user_number = 0;
+
 // Handle the /sign-up endpoint
 app.post("/sign-up", (req, res) => {
     // Get the JSON data from the body
@@ -63,7 +65,8 @@ app.post("/sign-up", (req, res) => {
     //
     // console.log(typeof(password), password);
     const hash = bcrypt.hashSync(password, 10);
-    users[username] = { hash }; //TODO: nonce later?
+    const signedIn = false;
+    users[username] = { hash, signedIn }; //TODO: nonce later?
     // console.log(users);
     //
     // H. Saving the users.json file
@@ -98,6 +101,14 @@ app.post("/sign-in", (req, res) => {
         })
         return;
     }
+
+    if (users[username]['signedIn'] === true) {
+        res.json({
+            status: "error",
+            error: "The account is already signed in."
+        });
+        return;
+    }
     // console.log(users[username]);
     // console.log(users[username]['hash']);
 
@@ -115,11 +126,17 @@ app.post("/sign-in", (req, res) => {
     
     req.session.user = {username};
 
+    console.log(users[username]['signedIn']);
+    users[username]['signedIn'] = true;
+    console.log(users[username]['signedIn']);
+
     // G. Sending a success response with the user account
     //
     res.json({
         status: "success", user: {username},
     })
+
+    user_number += 1;
 
     return;
 });
@@ -130,16 +147,30 @@ app.get("/sign-out", (req, res) => {
     //
     // Deleting req.session.user
     //
+    const users = JSON.parse(fs.readFileSync("./data/users.json"));
+
+    console.log("signout", req.session.user);
+    console.log(users[req.session.user]);
     delete req.session.user;
+
     //
     // Sending a success response
     //
     res.json({
         status: "success",
     })
+
+    user_number -= 1;
+
     return;
 });
 
+// Handle the /get-users endpoint
+app.get("/get-users", (req, res) => {
+
+    res.send({ user_number: user_number });
+    return;
+});
 
 const { createServer } = require("http");
 const { Server } = require("socket.io");
@@ -154,6 +185,7 @@ io.use((socket, next) => {
 })
 
 let queue = [];
+let rooms = {};
 
 // listen to "connection" emitted by socket io. immediate connection event when client connected
 io.on("connection", (socket) => {
@@ -172,6 +204,8 @@ io.on("connection", (socket) => {
             const room = `room_${player1.id}_${player2.id}`;
             player1.join(room);
             player2.join(room);
+            rooms[player1.id] = room;
+            rooms[player2.id] = room;
             io.to(room).emit('matched', room);
             console.log(`Matched players in room: ${room}`);
         }
@@ -184,6 +218,17 @@ io.on("connection", (socket) => {
 
     socket.on('disconnect', () => {
         queue = queue.filter(s => s.id !== socket.id);
+
+        // Handle disconnection within a room
+        const room = rooms[socket.id];
+        if (room) {
+            socket.leave(room);
+            io.to(room).emit('player disconnected', `Player ${socket.id} has left the game.`);
+            console.log(`Player ${socket.id} disconnected from room ${room}`);
+            
+            // Clean up the room and reset game state if needed
+            io.socketsLeave(room);
+        }
         console.log('User disconnected:', socket.id);
     });
     

@@ -85,7 +85,7 @@ $(document).ready(function() {
 
     // Abort finding opponent
     $('#loading-close').click(function() {
-        $('#loading').hide();
+        hideLoading();
         Socket.leaveQueue();
     });
 
@@ -93,12 +93,14 @@ $(document).ready(function() {
 
 function showSignedInPage() {
     $("#main-page").hide();
+    $("#game-page").hide();
     $("#signed-in-page").show();
 }
 
 function showMainPage() {
     $("#main-page").show();
     $("#signed-in-page").hide();
+    $("#game-page").hide();
 }
 
 let loadingInterval;
@@ -119,6 +121,17 @@ function hideLoading() {
     let loading = $("#loading");
     let loadingText = $("#loadingText");
     loading.hide();
-    loadingText.text("Loading.");
+    loadingText.text("Finding your opponent.");
     clearInterval(loadingInterval);
 }
+
+// Update online users every 500 ms.
+setInterval(() => {
+    fetch('/get-users')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Users:', data.user_number);
+        $("#user-counter").text(`Online users: ${data.user_number}`);
+      })
+      .catch(error => console.error('Error fetching users:', error));
+  }, 500); // This function will execute every 500 milliseconds

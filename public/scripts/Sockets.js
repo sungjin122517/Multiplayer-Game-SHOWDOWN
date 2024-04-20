@@ -16,6 +16,12 @@ const Socket = (function() {
             console.log("You have been matched! Room ID: ", room);
             enterGameRoom(room);
         });
+
+        // Listen for a player disconnection within your game room
+        socket.on("player disconnected", (message) => {
+            console.log(message); // Log or display the message to the user
+            showSignedInPage();
+        });
     };
 
     const disconnect = function() {

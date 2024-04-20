@@ -1,11 +1,10 @@
 {
- "wef": {
-  "hash": "$2b$10$vZZRMkoh4LQDUPzyZcGqKekg5GRY.583LlSKXHzNoX5ZanY.ZbgXK"
+ "q": {
+  "hash": "$2b$10$i7k3EychFSZtpR/RnBNCH.ykUHOyaZQmt73v2iNkMZfNCkipwAGjO",
+  "signedIn": false
  },
- "asdf": {
-  "hash": "$2b$10$/eZ4c/GMayXqlswR.ee7SuJbqupAgmZ8WyKeVCh0ik0vBo5YjIXU6"
- },
- "qwerqwer": {
-  "hash": "$2b$10$.U2hUvrP2qF21lziOOtcWuqTTcTakDWA81VFM9olKB1ZIIs.NR6mK"
+ "w": {
+  "hash": "$2b$10$N7OfG41V0wJWa7j3k.542ufqkb1BZe/0.OBdNU0uLnVQNFBSdYEXC",
+  "signedIn": false
  }
 }

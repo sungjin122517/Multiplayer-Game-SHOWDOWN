@@ -130,3 +130,13 @@ a {
 #signed-in-page {
     display: none;
 }
+
+#user-counter {
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    padding: 10px; 
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    z-index: 1000;
+}
