@@ -5,7 +5,7 @@ $(document).ready(function() {
     });
 
     // Close the modal when the close button is clicked
-    $('.close').click(function() {
+    $('#sign-up-modal-close').click(function() {
         $('#sign-up-modal').css('display', 'none');
     });
 
@@ -48,7 +48,8 @@ $(document).ready(function() {
         Authentication.signin(username, password,
             () => {
                 // Handle sign in
-                signInDisplay();
+                showSignedInPage();
+                Socket.connect();
             },
             (error) => { $("#sign-in-message").text(error); }
         );
@@ -60,7 +61,8 @@ $(document).ready(function() {
         Authentication.signout(
             () => {
                 // Handle Sign out
-                mainPageDisplay()
+                showMainPage();
+                Socket.disconnect();
             }
         );
     });
@@ -68,25 +70,35 @@ $(document).ready(function() {
     $("#play-button").on("click", () => {
         console.log("Start finding player")
         showLoading();
+        Socket.enterQueue();
     })
 
+    // Show instruction upon clicking instruction button on the main page
+    $("#game-instruction-button").on("click", () => {
+        $("#instruction-modal").show();
+    })
+
+    // Close the instruction upon clicking x button
+    $('#instruction-modal-close').click(function() {
+        $('#instruction-modal').hide();
+    });
+
+    // Abort finding opponent
+    $('#loading-close').click(function() {
+        $('#loading').hide();
+        Socket.leaveQueue();
+    });
 
 });
 
-function signInDisplay() {
-    $("#sign-in-form").hide();
-    $("#signupLink").hide();
-    $("#sign-in-message").hide();
-    $("#play-button").show();
-    $("#sign-out-button").show();
+function showSignedInPage() {
+    $("#main-page").hide();
+    $("#signed-in-page").show();
 }
 
-function mainPageDisplay() {
-    $("#sign-in-form").show();
-    $("#signupLink").show();
-    $("#sign-in-message").show();
-    $("#play-button").hide();
-    $("#sign-out-button").hide();
+function showMainPage() {
+    $("#main-page").show();
+    $("#signed-in-page").hide();
 }
 
 let loadingInterval;
@@ -97,7 +109,7 @@ function showLoading() {
     loading.show();
     function updateLoadingText() {
         // Update the text to add dots
-        loadingText.text("Loading." + ".".repeat(count));
+        loadingText.text("Finding your opponent." + ".".repeat(count));
         count = (count + 1) % 3;
     }
     loadingInterval = setInterval(updateLoadingText, 500);
