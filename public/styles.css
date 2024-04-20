@@ -96,11 +96,11 @@ a {
 }
 
 #play-button {
-    display: none;
+
 }
 
 #sign-out-button {
-    display: none;
+
 }
 
 #loading {
@@ -121,4 +121,12 @@ a {
     transform: translate(-50%, -50%);
     color: white;
     font-size: 36px;
+}
+
+#game-page {
+    display: none;
+}
+
+#signed-in-page {
+    display: none;
 }

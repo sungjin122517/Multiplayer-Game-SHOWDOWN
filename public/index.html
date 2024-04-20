@@ -5,29 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Front Page</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="/socket.io/socket.io.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="scripts/ui.js" defer></script>
     <script src="scripts/registration.js" defer></script>
     <script src="scripts/Authentication.js" defer></script>
+    <script src="scripts/Sockets.js" defer></script>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="main-page">
         <h1>SHOWDOWN!</h1>
         <form id="sign-in-form">
             <input id="sign-in-username" type="text" placeholder="Enter your user name" required>
             <input id="sign-in-password" type="password" placeholder="Enter your password" required>
             <button type="submit">Sign In</button>
         </form>
-        <button id="play-button">Play</button>
-        <button id="sign-out-button">Sign Out</button>
         <a href="#signup" id="signupLink">Not a user yet? Click here to sign up</a>
         <div id="sign-in-message" class="warning center"></div>
+        <button id="game-instruction-button">Game Instruction</button>
+    </div>
+
+    <div class="container" id="signed-in-page">
+        <h1>SHOWDOWN!</h1>
+        <button id="play-button">Play</button>
+        <button id="sign-out-button">Sign Out</button>
     </div>
 
     <!-- Modal for Sign Up -->
     <div id="sign-up-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span id="sign-up-modal-close" class="close">&times;</span>
             <h2>Sign Up</h2>
             <form id="sign-up-form">
                 <input id="sign-up-username" type="text" placeholder="Enter your user name" required>
@@ -39,9 +46,24 @@
         </div>
     </div>
 
+    <!-- Modal for Instructions -->
+    <div id="instruction-modal" class="modal">
+        <div class="modal-content">
+            <span id="instruction-modal-close" class="close">&times;</span>
+            <h2>Instruction</h2>
+            <div>This is instruction</div>
+        </div>
+    </div>
+
     <!-- loading screen -->
     <div id="loading">
-        <div id="loadingText">Loading.</div>
+        <span id="loading-close" class="close">&times;</span>
+        <div id="loadingText">Finding your opponent.</div>
+s    </div>
+
+    <!-- game screen -->
+    <div class="container" id="game-page">
+        <h1 id="temp-gameroomtext">Game Room</h1>
     </div>
 
 </body>
