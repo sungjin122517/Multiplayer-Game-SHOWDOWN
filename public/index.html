@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="scripts/ui.js" defer></script>
+    <script src="scripts/registration.js" defer></script>
+    <script src="scripts/Authentication.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>SHOWDOWN!</h1>
+        <form id="sign-in-form">
+            <input id="sign-in-username" type="text" placeholder="Enter your user name" required>
+            <input id="sign-in-password" type="password" placeholder="Enter your password" required>
+            <button type="submit">Sign In</button>
+        </form>
+        <button id="play-button">Play</button>
+        <button id="sign-out-button">Sign Out</button>
+        <a href="#signup" id="signupLink">Not a user yet? Click here to sign up</a>
+        <div id="sign-in-message" class="warning center"></div>
+    </div>
+
+    <!-- Modal for Sign Up -->
+    <div id="sign-up-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="sign-up-form">
+                <input id="sign-up-username" type="text" placeholder="Enter your user name" required>
+                <input id="sign-up-password" type="password" placeholder="Enter your password" required>
+                <input id="sign-up-password-confirm" type="password" placeholder="Enter your password again"></input>
+                <button type="submit">Sign Up</button>
+                <div id="sign-up-message" class="warning center"></div>
+            </form>
+        </div>
+        <div id="loading">
+            <div id="loadingText">Loading.</div>
+        </div>
+    </div>
+
+</body>
+</html>
