@@ -153,36 +153,40 @@ io.use((socket, next) => {
     gameSession(socket.request, {}, next);
 })
 
-const onlineUserList = {};
+let queue = [];
 
 // listen to "connection" emitted by socket io. immediate connection event when client connected
 io.on("connection", (socket) => {
-    if (socket.request.session.user) {
-        const user = socket.request.session.user;
-        const { username } = user;
-        onlineUserList[username] = user;
-        console.log(onlineUserList);
+    console.log('A user connected:', socket.id);
 
-        io.emit("add user", JSON.stringify(user));
+    // Access session variables
+    if (socket.handshake.session) {
+        console.log("Session data:", socket.handshake.session);
     }
 
-    socket.on("disconnect", () => {
-        if (socket.request.session.user) {
-            const user = socket.request.session.user;
-            const { username } = user;
-            if (onlineUserList[username]) {
-                delete onlineUserList[username];
-            }
-            console.log(onlineUserList);
-            io.emit("remove user", JSON.stringify(user));
-        } 
+    socket.on('enter queue', () => {
+        console.log("player entered queue:", socket.id);
+        queue.push(socket);
+        if (queue.length >= 2) {
+            const [player1, player2] = queue.splice(0, 2);
+            const room = `room_${player1.id}_${player2.id}`;
+            player1.join(room);
+            player2.join(room);
+            io.to(room).emit('matched', room);
+            console.log(`Matched players in room: ${room}`);
+        }
+    });
+
+    socket.on('leave queue', () => {
+        queue = queue.filter(s => s.id !== socket.id); // Remove from queue if they decide to leave
+        console.log(`User ${socket.id} left the queue`);
     })
 
-    socket.on("get users", () => {
-        // Send the online users in the browser
-        socket.emit("users", JSON.stringify(onlineUserList));
-        // console.log('get users');
-    })
+    socket.on('disconnect', () => {
+        queue = queue.filter(s => s.id !== socket.id);
+        console.log('User disconnected:', socket.id);
+    });
+    
 
 })
 
@@ -192,5 +196,5 @@ io.on("connection", (socket) => {
 //     console.log("The chat server has started...");
 // });
 httpServer.listen(8000, () => {
-    console.log("The chat server has started...");
+    console.log("The server is running...");
 });
