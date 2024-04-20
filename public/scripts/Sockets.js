@@ -12,14 +12,28 @@ const Socket = (function() {
             
         });
 
-        socket.on("matched", (room) => {
-            console.log("You have been matched! Room ID: ", room);
-            enterGameRoom(room);
+        // socket.on("matched", (room) => {
+        //     console.log("You have been matched! Room ID: ", room);
+        //     enterGameRoom(room);
+
+
+        // });
+        // Listen for the "Game Start" event
+        socket.on('matched', (gameHtml) => {
+            // Replace the content with the new game HTML
+            document.open();
+            document.write(gameHtml);
+            document.close();
         });
 
         // Listen for a player disconnection within your game room
         socket.on("player disconnected", (message) => {
             console.log(message); // Log or display the message to the user
+            showSignedInPage();
+        });
+
+        // Listen for the other player leaving the room
+        socket.on("One player left", (message) => {
             showSignedInPage();
         });
     };
@@ -55,7 +69,27 @@ const Socket = (function() {
         $("#signed-in-page").hide();
         $("#game-page").show();
         $("#temp-gameroomtext").text(room);
+        setTimeout(() => {
+            $('#game-stats-modal').show();
+        }, 5000);
     };
 
-    return { connect, disconnect, enterQueue, leaveQueue };
+    const leaveGameRoom = function() {
+        if (socket && socket.connected) {
+            socket.emit("leave room");
+        }
+    }
+
+    const replayGame = () => {
+        if (socket && socket.connected) {
+            socket.emit("replay");
+        }
+    }
+    
+    const replayMatched = () => {
+        hideReplayLoading();
+        $("game-stats-modal").hide();
+    }
+
+    return { connect, disconnect, enterQueue, leaveQueue, leaveGameRoom, replayGame, replayMatched };
 })();

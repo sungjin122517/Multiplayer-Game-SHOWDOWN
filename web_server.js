@@ -10,6 +10,11 @@ app.use(express.static('public'));
 
 app.use(express.json());
 
+// Serve the index.html file for all sockets
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
+
 const gameSession = session({
     secret: "game",
     resave: false,
@@ -182,6 +187,7 @@ io.use((socket, next) => {
 
 let queue = [];
 let rooms = {};
+let roomVariables = [];
 
 // listen to "connection" emitted by socket io. immediate connection event when client connected
 io.on("connection", (socket) => {
@@ -199,7 +205,8 @@ io.on("connection", (socket) => {
             player2.join(room);
             rooms[player1.id] = room;
             rooms[player2.id] = room;
-            io.to(room).emit('matched', room);
+            // io.to(room).emit('matched', room);
+            io.to(room).emit('matched', 'test.html');
             console.log(`Matched players in room: ${room}`);
         }
     });
@@ -225,6 +232,49 @@ io.on("connection", (socket) => {
         console.log('User disconnected:', socket.id);
     });
     
+    socket.on('leave room', () => {
+        const room = rooms[socket.id];
+        let otherSocketId = null;
+
+        // Iterate over the rooms object to find the other socket in the same room
+        for (let id in rooms) {
+            if (rooms[id] === room && id !== socket.id) {
+                otherSocketId = id;
+                break;
+            }
+        }
+
+        // Notify the other socket
+        if (otherSocketId) {
+            io.to(otherSocketId).emit('One player left');
+        }
+
+        // Remove both sockets from the room data structure
+        delete rooms[socket.id]; // Assuming each socket.id has a unique room key
+        delete rooms[otherSocketId]; // Clean up the other socket's room reference
+    });
+
+    socket.on('replay', () => {
+        const room = rooms[socket.id];
+        let otherSocketId = null;
+
+        // Iterate over the rooms object to find the other socket in the same room
+        for (let id in rooms) {
+            if (rooms[id] === room && id !== socket.id) {
+                otherSocketId = id;
+                break;
+            }
+        }
+        const index = array.indexOf(room);
+        if (index > -1) {
+            array.splice(index, 1);
+            socket.emit('replay match');
+        } else {
+            socket.to(otherSocketId).emit('replay match');
+        }
+    });
+
+
 
 })
 

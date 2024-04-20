@@ -89,6 +89,19 @@ $(document).ready(function() {
         Socket.leaveQueue();
     });
 
+    $("#stats-leave-button").click(() => {
+        Socket.leaveGameRoom();
+        showSignedInPage();
+    });
+
+    $("#stats-replay-button").click(() => {
+        showReplayLoading();
+    });
+
+    $("#replay-loading-close").click(() => {
+        hideReplayLoading();
+    });
+
 });
 
 function showSignedInPage() {
@@ -104,6 +117,8 @@ function showMainPage() {
 }
 
 let loadingInterval;
+let replayLoadingInterval;
+
 function showLoading() {
     let loading = $("#loading");
     let loadingText = $("#loadingText");
@@ -123,6 +138,27 @@ function hideLoading() {
     loading.hide();
     loadingText.text("Finding your opponent.");
     clearInterval(loadingInterval);
+}
+
+function showReplayLoading() {
+    let loading = $("#replay-loading");
+    let loadingText = $("#replay-loadingText");
+    let count = 1;
+    loading.show();
+    function updateLoadingText() {
+        // Update the text to add dots
+        loadingText.text("Waiting for your opponent." + ".".repeat(count));
+        count = (count + 1) % 3;
+    }
+    replayLoadingInterval = setInterval(updateLoadingText, 500);
+}
+
+function hideReplayLoading() {
+    let loading = $("#replay-loading");
+    let loadingText = $("#replay-loadingText");
+    loading.hide();
+    loadingText.text("Finding your opponent.");
+    clearInterval(replayLoadingInterval);
 }
 
 // Update online users every 500 ms.

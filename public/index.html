@@ -67,6 +67,43 @@
     <!-- game screen -->
     <div class="container" id="game-page">
         <h1 id="temp-gameroomtext">Game Room</h1>
+
+        
+        <div id="game-stats-modal" class="modal">
+            <div class="modal-content">
+                <h2>Player A won the game</h2>
+                <table>
+                    <tr>
+                        <td>Player</td>
+                        <td>A</td>
+                        <td>B</td>
+                    </tr>
+                    <tr>
+                        <td>Rank</td>
+                        <td>2,1</td>
+                        <td>2,2</td>
+                    </tr>
+                    <tr>
+                        <td>Kill/Death</td>
+                        <td>2,4</td>
+                        <td>3,1</td>
+                    </tr>
+                    <tr>
+                        <td>Average reaction time</td>
+                        <td>3,3</td>
+                        <td>3,4</td>
+                    </tr>
+                </table>
+                <div class="buttons">
+                    <button id="stats-replay-button" type="button" class="stats-button">Replay</button>
+                    <button id="stats-leave-button"type="button" class="stats-button">Exit</button>
+                </div>
+            </div>
+        </div>
+        <div id="replay-loading">
+            <span id="replay-loading-close" class="close">&times;</span>
+            <div id="replay-loadingText">Waiting for your opponent.</div>
+        </div>
     </div>
 
 </body>
