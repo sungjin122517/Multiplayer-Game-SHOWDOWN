@@ -8,11 +8,13 @@ body, html {
     justify-content: center;
     align-items: center;
     background-color: #f4f4f4;
-    background-image: url(src/background_game.png);
+    background-image: url(src/img/background_game.png);
     background-size: cover;
 }
 
 .container {
+    min-width: 25%;
+    min-height: 25%;
     text-align: center;
     padding: 20px;
     background: white;
@@ -36,6 +38,7 @@ input[type="password"] {
 button {
     width: 85%;
     padding: 10px;
+    margin: 5px 0;
     background-color: #5c67f2;
     color: white;
     border: none;
@@ -113,7 +116,12 @@ a {
 }
 
 #sign-out-button {
+    margin-top: 20px;
+}
 
+#sign-in-message {
+    color: red;
+    margin: 5px 5px;
 }
 
 #sign-up-password-confirm {
