@@ -205,8 +205,8 @@ io.on("connection", (socket) => {
             player2.join(room);
             rooms[player1.id] = room;
             rooms[player2.id] = room;
-            io.to(room).emit('matched', room);
-            // io.to(room).emit('matched', 'test.html');
+            // io.to(room).emit('matched', room);
+            io.to(room).emit('matched', 'test.html');
             console.log(`Matched players in room: ${room}`);
         }
     });

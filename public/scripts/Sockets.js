@@ -8,19 +8,17 @@ const Socket = (function() {
             
         });
 
-        socket.on("matched", (room) => {
-            console.log("You have been matched! Room ID: ", room);
-            enterGameRoom(room);
-
-
-        });
-        // Listen for the "Game Start" event
-        // socket.on('matched', (gameHtml) => {
-        //     // Replace the content with the new game HTML
-        //     document.open();
-        //     document.write(gameHtml);
-        //     document.close();
+        // socket.on("matched", (room) => {
+        //     console.log("You have been matched! Room ID: ", room);
+        //     enterGameRoom(room);
         // });
+        // Listen for the "Game Start" event
+        socket.on('matched', (gameHtml) => {
+            // Replace the content with the new game HTML
+            document.open();
+            document.write(gameHtml);
+            document.close();
+        });
 
         // Listen for a player disconnection within your game room
         socket.on("player disconnected", (message) => {
@@ -31,6 +29,11 @@ const Socket = (function() {
         // Listen for the other player leaving the room
         socket.on("One player left", (message) => {
             showSignedInPage();
+        });
+
+        // To be implemented
+        socket.on("replay match", (message) => {
+            //
         });
     };
 
