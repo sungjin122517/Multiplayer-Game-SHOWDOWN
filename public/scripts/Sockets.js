@@ -118,8 +118,8 @@ const Socket = (function() {
         socket.on("game result", (playersList, timeList, kdaList, winnerId) => {
             const socketId = socket.id;
             if (playersList.includes(socketId)) {
-                if (socketId == winnerId) GameScreen.gameWin();
-                else GameScreen.gameLost();
+                if (socketId == winnerId) Desperado.dead();
+                else Player.dead();
 
                 const timeStat = JSON.parse(timeList);
                 const kdaStat = JSON.parse(kdaList);
