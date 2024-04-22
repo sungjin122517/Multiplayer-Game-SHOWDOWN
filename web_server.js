@@ -189,6 +189,43 @@ let queue = [];
 let rooms = {};
 let roomVariables = [];
 
+
+
+
+// Assume only one gameRoom is made (only two players are)
+let numberOfRounds = 0;
+const maxUsersLife = 3;
+
+let isRoundStart = false;
+let allowFire = false;
+
+let gameWinner = null;
+let roundWinner = null;
+
+const penaltyTime = 2;  // in seconds
+
+// Showdown time calculation: 3 seconds ~ 3+(rangeShowdownTime) seconds
+let showdownTime = null;
+const minShowdownTime = 3;
+const rangeShowdownTime = 5;
+
+
+let roundStartTime;
+let validResponseTime;
+
+const gameJoinUsersSet = new Set();
+const readyUsersSet = new Set();
+const cheatUsersSet = new Set();
+
+const penalizedUsers = {};
+const gameUsersHealth = {};
+const responseStatList = {};
+const kdaStatList = {};
+
+
+
+
+
 // listen to "connection" emitted by socket io. immediate connection event when client connected
 io.on("connection", (socket) => {
     console.log('A user connected:', socket.id);
@@ -206,7 +243,16 @@ io.on("connection", (socket) => {
             rooms[player1.id] = room;
             rooms[player2.id] = room;
             // io.to(room).emit('matched', room);
+            gameJoinUsersSet.add(player1.id);
+            gameJoinUsersSet.add(player2.id);
             io.to(room).emit('matched', 'game.html');
+            // Announce round start to players
+            io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)));
+            gameJoinUsersSet.forEach((x) => {
+                gameUsersHealth[x] = maxUsersLife;
+                penalizedUsers[x] = 0;
+                kdaStatList[x] = {'kill' : 0, 'death' : 0};
+            });
             console.log(`Matched players in room: ${room}`);
         }
     });
@@ -284,34 +330,36 @@ io.on("connection", (socket) => {
      * 
      */
 
-    socket.on("player join", () => {
-        if (gameJoinUsersSet.size == 0) {
-            gameJoinUsersSet.add(socket.id);
-            console.log('One player joined. Room size: %d', gameJoinUsersSet.size);
-        }
-        else if (gameJoinUsersSet.size == 1) {
-            gameJoinUsersSet.add(socket.id);
-            console.log('2 players joined: ');
+    // socket.on("player join", () => {
+    //     if (gameJoinUsersSet.size == 0) {
+    //         gameJoinUsersSet.add(socket.id);
+    //         console.log('One player joined. Room size: %d', gameJoinUsersSet.size);
+    //     }
+    //     else if (gameJoinUsersSet.size == 1) {
+    //         gameJoinUsersSet.add(socket.id);
+    //         console.log('2 players joined: ');
             
-            // Announce round start to players
-            io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)));
-            gameJoinUsersSet.forEach((x) => {
-                gameUsersHealth[x] = maxUsersLife;
-                penalizedUsers[x] = 0;
-                kdaStatList[x] = {'kill' : 0, 'death' : 0};
-            })
+    //         // Announce round start to players
+    //         io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)));
+    //         gameJoinUsersSet.forEach((x) => {
+    //             gameUsersHealth[x] = maxUsersLife;
+    //             penalizedUsers[x] = 0;
+    //             kdaStatList[x] = {'kill' : 0, 'death' : 0};
+    //         })
 
-            console.log(gameUsersHealth);
-        }
-        else {
-            console.log('excessive join requested');
-        }
-    })
+    //         console.log(gameUsersHealth);
+    //     }
+    //     else {
+    //         console.log('excessive join requested');
+    //     }
+    // })
 
 
     socket.on("ready", () => {
         console.log('One player stated ready');
         readyUsersSet.add(socket.id);
+        console.log(readyUsersSet);
+        console.log(gameJoinUsersSet);
         // Start when all players are ready
         if (readyUsersSet.size == gameJoinUsersSet.size) {
             numberOfRounds++;

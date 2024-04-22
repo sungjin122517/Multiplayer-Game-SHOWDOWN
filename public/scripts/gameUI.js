@@ -186,6 +186,7 @@ const GameScreen = (function() {
 
     const displayGameStat = function(kdaStat, timeStat) {
         // display stats
+        
     }
 
 
@@ -204,8 +205,6 @@ const UI = (function() {
             component.initialize();
         }
     };
-
-    Socket.connect(); // TODO May be moved
 
     return { initialize };
 })();

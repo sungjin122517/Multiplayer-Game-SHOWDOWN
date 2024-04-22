@@ -15,9 +15,11 @@ const Socket = (function() {
         // Listen for the "Game Start" event
         socket.on('matched', (gameHtml) => {
             // Replace the content with the new game HTML
-            document.open();
-            document.write(gameHtml);
-            document.close();
+            UI.initialize();
+            enterGameRoom("room");
+            // document.open();
+            // document.write(gameHtml);
+            // document.close();
         });
 
         // Listen for a player disconnection within your game room
@@ -67,7 +69,7 @@ const Socket = (function() {
                     }
                 }
 
-                Sound.damaged();
+                // Sound.damaged();
                 if (winnerId != socketId) Player.damaged(hpList[socketId]);
                 else Desperado.damaged(desperadoHP);
 
@@ -152,14 +154,15 @@ const Socket = (function() {
         // Functionality to switch view to the game room
         console.log("Entering game room:", room);
         // This could also change the client state, e.g., display the game room UI
+        pressed_j();
         hideLoading();
         $("#main-page").hide();
         $("#signed-in-page").hide();
         $("#game-page").show();
         $("#temp-gameroomtext").text(room);
-        setTimeout(() => {
-            $('#game-stats-modal').show();
-        }, 5000);
+        // setTimeout(() => {
+        //     $('#game-stats-modal').show();
+        // }, 5000);
     };
 
     const leaveGameRoom = function() {
