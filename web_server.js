@@ -206,7 +206,7 @@ io.on("connection", (socket) => {
             rooms[player1.id] = room;
             rooms[player2.id] = room;
             // io.to(room).emit('matched', room);
-            io.to(room).emit('matched', 'test.html');
+            io.to(room).emit('matched', 'game.html');
             console.log(`Matched players in room: ${room}`);
         }
     });
@@ -276,6 +276,118 @@ io.on("connection", (socket) => {
     });
 
 
+    /*************
+     * 
+     * 
+     *  GAME IMPLEMENTATION PART
+     * 
+     * 
+     */
+
+    socket.on("player join", () => {
+        if (gameJoinUsersSet.size == 0) {
+            gameJoinUsersSet.add(socket.id);
+            console.log('One player joined. Room size: %d', gameJoinUsersSet.size);
+        }
+        else if (gameJoinUsersSet.size == 1) {
+            gameJoinUsersSet.add(socket.id);
+            console.log('2 players joined: ');
+            
+            // Announce round start to players
+            io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)));
+            gameJoinUsersSet.forEach((x) => {
+                gameUsersHealth[x] = maxUsersLife;
+                penalizedUsers[x] = 0;
+                kdaStatList[x] = {'kill' : 0, 'death' : 0};
+            })
+
+            console.log(gameUsersHealth);
+        }
+        else {
+            console.log('excessive join requested');
+        }
+    })
+
+
+    socket.on("ready", () => {
+        console.log('One player stated ready');
+        readyUsersSet.add(socket.id);
+        // Start when all players are ready
+        if (readyUsersSet.size == gameJoinUsersSet.size) {
+            numberOfRounds++;
+            
+            responseStatList[numberOfRounds] = {};
+            gameJoinUsersSet.forEach((id)=> {
+                responseStatList[numberOfRounds][id] = null;
+            })
+            console.log('All players are ready: ');
+            
+            // Announce round start to players
+            isRoundStart = true;
+            io.emit("round start", JSON.stringify(Array.from(readyUsersSet)), numberOfRounds);
+
+            executeCountdown();
+        }
+    })
+
+
+
+    socket.on("player pressed", () => {
+        const id = socket.id;
+        if (isRoundStart) {
+            if (!allowFire) {
+                // Penalize if non-cheat AND hasn't been penalized
+                if (!cheatUsersSet.has(id) && penalizedUsers[id] == 0) {
+                    penalizedUsers[id] = penaltyTime;
+                    io.emit("penalize user", JSON.stringify(Array.from(readyUsersSet)), id);
+                    // free user
+                    dePenalize(socket.id, penaltyTime*1000);
+                }
+            }
+            else if (allowFire) {
+                if (penalizedUsers[id] == penaltyTime) {
+                    console.log(penalizedUsers);
+                    console.log('user still in penalty');
+                } else {
+                    // Shoot animation
+                    io.emit("user shoot", JSON.stringify(Array.from(readyUsersSet)), id);
+
+                    // Only update roundWinner once
+                    if (!roundWinner) {
+                        roundWinner = id;
+
+                        let roundLoser;
+                        // Iterating over readyUsersSet
+                        readyUsersSet.forEach((id) => {
+                            if (id != roundWinner) roundLoser = id;
+                        });
+                        gameUsersHealth[roundLoser]--;
+                        kdaStatList[roundWinner]['kill']++;
+                        kdaStatList[roundLoser]['death']++;
+                        console.log(gameUsersHealth);
+                        console.log('Winner: %s', roundWinner);
+                        roundEnd(500);
+                    }
+
+                    // update statistics
+                    validResponseTime = Date.now();
+                    if (!responseStatList[numberOfRounds][id]) {
+                        responseStatList[numberOfRounds][id] = validResponseTime - roundStartTime;
+                    }
+                }
+            }
+        } else {
+            console.log('game has not started yet')
+        }
+    })
+
+    socket.on("cheat mode", () => {
+        const id = socket.id;
+        console.log('Player entered cheat mode');
+        if (!cheatUsersSet.has(id)) cheatUsersSet.add(id);
+        else cheatUsersSet.delete(id);
+    })
+
 
 })
 
@@ -285,6 +397,90 @@ function disconnectCleanUp(username) {
     fs.writeFileSync("./data/users.json", JSON.stringify(users, null, " "));
     user_number -= 1;
 }
+
+
+/*****
+ * 
+ * 
+ * GAME PART
+ * 
+ * 
+ */
+
+
+function countdown(time) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            // console.log('%d sec countdown finished', time/1000);
+            resolve();
+        }, time);
+    });
+}
+
+async function executeCountdown() {
+    // Round x
+    console.log('### Round %d..', numberOfRounds);
+    await countdown(5000); 
+
+    // Showdown
+    const random = Math.random();
+    const duration = random * rangeShowdownTime + minShowdownTime;
+    showdownTime = duration * 1000;
+
+    console.log('!Showdown random time: %d seconds', showdownTime/1000);
+    await countdown(showdownTime);
+    console.log('Showdown!');
+    io.emit("showdown");
+    allowFire = true;
+
+    roundStartTime = Date.now();
+}
+
+
+async function roundEnd(time) {
+    await countdown(time);
+    console.log('Computed winner for %d seconds', time/1000);
+
+    io.emit("round result", JSON.stringify(Array.from(readyUsersSet)), roundWinner, JSON.stringify(gameUsersHealth), numberOfRounds);
+    readyUsersSet.clear();
+    roundWinner = null;
+    isRoundStart = false;
+    allowFire = false;
+    for (user in penalizedUsers) {
+        penalizedUsers[user] = 0;
+    }
+
+    // Check for game end
+    for (user in gameUsersHealth) {
+        if (gameUsersHealth[user] == 0) {
+            gameWinner = user;
+            gameEnd();
+        }
+    }
+}
+
+function gameEnd() {
+    console.log(responseStatList);
+    console.log(kdaStatList);
+    io.emit("game result", JSON.stringify(Array.from(gameJoinUsersSet)), JSON.stringify(responseStatList), JSON.stringify(kdaStatList), gameWinner);
+    gameWinner = null;
+    numberOfRounds = null;
+
+    // reset the object arrays {}
+    Object.keys(gameUsersHealth).forEach(key => delete gameUsersHealth[key]);
+    Object.keys(responseStatList).forEach(key => delete responseStatList[key]);
+    Object.keys(kdaStatList).forEach(key => delete kdaStatList[key]);
+    gameJoinUsersSet.clear();
+}
+
+
+async function dePenalize(playerId, time) {
+    // console.log('Penalized user %s for %d seconds', playerId, time/1000);
+    await countdown(time);
+    penalizedUsers[playerId] = 0;
+    io.emit("depenalize user", JSON.stringify(Array.from(readyUsersSet)), playerId);
+}
+
 
 // Use a web server to listen at port 8000
 // Previous HTTP communication

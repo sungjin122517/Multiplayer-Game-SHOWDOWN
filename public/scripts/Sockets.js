@@ -35,6 +35,95 @@ const Socket = (function() {
         socket.on("replay match", (message) => {
             //
         });
+
+        /*****
+         * 
+         * 
+         * GAME PLAY
+         * 
+         */
+        
+        socket.on("round start", (playersList, roundNum) => {
+            const socketId = socket.id;
+            if (playersList.includes(socketId)) {
+                GameScreen.displayRoundStart(roundNum);
+                // player re-live again
+                // play whistle.mp3
+            }
+        })
+
+        socket.on("round result", (playersList, winnerId, hpList, roundNum) => {
+            const socketId = socket.id;
+
+            if (playersList.includes(socketId)) {
+                hpList = JSON.parse(hpList);
+
+                let desperadoHP;
+                // Iterating over object keys
+                for (const id in hpList) {
+                    if (id !== socketId) {
+                        desperadoHP = hpList[id];
+                        break; // Exit the loop once the other key is found
+                    }
+                }
+
+                Sound.damaged();
+                if (winnerId != socketId) Player.damaged(hpList[socketId]);
+                else Desperado.damaged(desperadoHP);
+
+                
+                GameScreen.displayRoundWinner(winnerId, roundNum);
+            }
+        })
+
+        socket.on("showdown", () => {
+            GameScreen.displayShowdown();
+        })
+
+        socket.on("user shoot", (playersList, id) => {
+            const socketId = socket.id;
+            if (playersList.includes(socketId)) {
+                if (id == socketId) Player.shoot();
+                else Desperado.shoot();
+            }
+        })
+
+        socket.on("penalize user", (playersList, penaltyUser) => {
+            const socketId = socket.id;
+            if (playersList.includes(socketId)) {
+                if (penaltyUser == socketId) Player.penalize();
+                else Desperado.penalize();
+            }
+        })
+        
+        socket.on("depenalize user", (playersList, penaltyUser) => {
+            const socketId = socket.id;
+            if (playersList.includes(socketId)) {
+                if (penaltyUser == socketId) Player.depenalize();
+                else Desperado.depenalize();
+            }
+        })
+        
+        socket.on("game set", (playersList) => {
+            const socketId = socket.id;
+            if (playersList.includes(socketId)) {
+                Player.play();
+                Desperado.play();
+                Player.player_key();
+            }
+        })
+
+        socket.on("game result", (playersList, timeList, kdaList, winnerId) => {
+            const socketId = socket.id;
+            if (playersList.includes(socketId)) {
+                if (socketId == winnerId) GameScreen.gameWin();
+                else GameScreen.gameLost();
+
+                const timeStat = JSON.parse(timeList);
+                const kdaStat = JSON.parse(kdaList);
+                GameScreen.displayGameStat(kdaStat, timeStat);
+            }
+        })
     };
 
     const disconnect = function() {
@@ -90,5 +179,23 @@ const Socket = (function() {
         $("game-stats-modal").hide();
     }
 
-    return { connect, disconnect, enterQueue, leaveQueue, leaveGameRoom, replayGame, replayMatched };
+
+    const pressed = function() {
+        socket.emit("player pressed");
+    }
+
+    const pressed_r = function() {
+        socket.emit("ready");
+    }
+
+    const pressed_j = function() {
+        // TODO modify later
+        socket.emit("player join");
+    }
+
+    const pressed_ctrl_p = function() {
+        socket.emit("cheat mode");
+    }
+
+    return { connect, disconnect, enterQueue, leaveQueue, leaveGameRoom, replayGame, replayMatched, pressed, pressed_r, pressed_j, pressed_ctrl_p};
 })();
