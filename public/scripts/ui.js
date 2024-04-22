@@ -96,6 +96,7 @@ $(document).ready(function() {
 
     $("#stats-replay-button").click(() => {
         showReplayLoading();
+        Socket.replayGame();
     });
 
     $("#replay-loading-close").click(() => {

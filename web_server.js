@@ -265,12 +265,13 @@ io.on("connection", (socket) => {
                 break;
             }
         }
-        const index = array.indexOf(room);
+
+        const index = roomVariables.indexOf(room);
         if (index > -1) {
-            array.splice(index, 1);
-            socket.emit('replay match');
+            roomVariables.push(room);
         } else {
-            socket.to(otherSocketId).emit('replay match');
+            roomVariables.splice(index, 1);
+            io.to(room).emit('replay match');
         }
     });
 
