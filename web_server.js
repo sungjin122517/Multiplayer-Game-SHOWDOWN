@@ -205,8 +205,8 @@ io.on("connection", (socket) => {
             player2.join(room);
             rooms[player1.id] = room;
             rooms[player2.id] = room;
-            // io.to(room).emit('matched', room);
-            io.to(room).emit('matched', 'test.html');
+            io.to(room).emit('matched', room);
+            // io.to(room).emit('matched', 'test.html');
             console.log(`Matched players in room: ${room}`);
         }
     });
@@ -265,12 +265,13 @@ io.on("connection", (socket) => {
                 break;
             }
         }
-        const index = array.indexOf(room);
+
+        const index = roomVariables.indexOf(room);
         if (index > -1) {
-            array.splice(index, 1);
-            socket.emit('replay match');
+            roomVariables.push(room);
         } else {
-            socket.to(otherSocketId).emit('replay match');
+            roomVariables.splice(index, 1);
+            io.to(room).emit('replay match');
         }
     });
 

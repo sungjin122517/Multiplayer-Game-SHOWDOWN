@@ -1,10 +1,6 @@
 const Socket = (function() {
     let socket = null;
 
-    const getSocket = function() {
-        return socket;
-    };
-
     const connect = function() {
         socket = io();
         socket.on("connect", () => {
@@ -12,19 +8,19 @@ const Socket = (function() {
             
         });
 
-        // socket.on("matched", (room) => {
-        //     console.log("You have been matched! Room ID: ", room);
-        //     enterGameRoom(room);
+        socket.on("matched", (room) => {
+            console.log("You have been matched! Room ID: ", room);
+            enterGameRoom(room);
 
 
-        // });
-        // Listen for the "Game Start" event
-        socket.on('matched', (gameHtml) => {
-            // Replace the content with the new game HTML
-            document.open();
-            document.write(gameHtml);
-            document.close();
         });
+        // Listen for the "Game Start" event
+        // socket.on('matched', (gameHtml) => {
+        //     // Replace the content with the new game HTML
+        //     document.open();
+        //     document.write(gameHtml);
+        //     document.close();
+        // });
 
         // Listen for a player disconnection within your game room
         socket.on("player disconnected", (message) => {
