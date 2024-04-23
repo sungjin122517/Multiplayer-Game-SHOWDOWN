@@ -1,4 +1,4 @@
-const Sound = (function() {
+window.Sound = (function() {
     const initialize = function() {};
 
     const bgm = function() {

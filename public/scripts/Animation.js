@@ -1,6 +1,4 @@
-// It is an object only responsible for animation
-
-const Cowboy = (function() {
+window.Cowboy = (function() {
     const initialize = function() {};
 
     const play = function() {
@@ -34,7 +32,7 @@ const Cowboy = (function() {
     return {initialize, play, reload, shoot, damaged, penalize, depenalize, dead};
 })();
 
-const Desperado = (function() {
+window.Desperado = (function() {
     const initialize = function() {};
 
     const play = function() {
@@ -68,11 +66,12 @@ const Desperado = (function() {
     return {initialize, play, reload, shoot, damaged, penalize, depenalize, dead};
 })();
 
-const Heart = (function() {
+window.Heart = (function() {
+    const initialize = function() {};
 
     const broken = function() {
 
     }
 
-    
+    return {initialize, broken};
 })();

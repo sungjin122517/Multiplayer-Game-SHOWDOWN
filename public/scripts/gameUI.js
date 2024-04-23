@@ -53,12 +53,12 @@ const Player = (function() {
 
     // TODO may be deleted later
     const initialize = function() {
-        $(document).on("keydown", function(event) {
-            // Key: j
-            if (event.keyCode == 74) {
-                Socket.pressed_j();
-            }
-        })
+        // $(document).on("keydown", function(event) {
+        //     // Key: j
+        //     if (event.keyCode == 74) {
+        //         Socket.pressed_j();
+        //     }
+        // })
     };
 
     // constantly detects key press
@@ -194,7 +194,7 @@ const GameScreen = (function() {
     }
 
 
-    return {initialize, displayShowdown, displayRoundStart, displayRoundWinner, gameWin, gameLost, displayGameStat};
+    return {initialize, displayShowdown, displayRoundStart, displayRoundWinner, displayGameStat};
 }
 )();
 
@@ -204,7 +204,7 @@ const UI = (function() {
     // This function initializes the UI
     const initialize = function() {
         // Initialize the components
-        const components = [Player, Desperado, Sound, Cowboy, Desperado, Heart];
+        const components = [Player, Cowboy, Desperado, Sound, Heart, GameScreen];
         for (const component of components) {
             component.initialize();
         }
