@@ -19,6 +19,7 @@ const Player = (function() {
     const shoot = function() {
         // Player shoot animation
         // Cowboy.shoot();
+        // Sound.shoot();
     }
 
     const damaged = function(hp) {
@@ -46,6 +47,9 @@ const Player = (function() {
         // Cowboy.destun();
     };
 
+    const dead = function() {
+        // Cowboy.dead();
+    };
 
     // TODO may be deleted later
     const initialize = function() {
@@ -81,7 +85,7 @@ const Player = (function() {
         })
     };
     
-    return {initialize, player_key, play, reload, shoot, damaged, penalize, depenalize};
+    return {initialize, player_key, play, reload, shoot, damaged, penalize, depenalize, dead};
 })();
 
 const Desperado = (function() {
@@ -128,7 +132,12 @@ const Desperado = (function() {
         // Desperado.destun();
     };
 
-    return {initialize, play, reload, shoot, damaged, penalize, depenalize};
+    const dead = function() {
+        // Cowboy.dead();
+    };
+
+
+    return {initialize, play, reload, shoot, damaged, penalize, depenalize, dead};
 })();
 
 const GameScreen = (function() {
@@ -139,6 +148,7 @@ const GameScreen = (function() {
         // Play animation
         Player.play();
         Desperado.play();
+        Sound.whistle();
 
         $('#victory').hide();
 
@@ -165,6 +175,8 @@ const GameScreen = (function() {
 
     const displayRoundWinner = function(playerId, roundNum) {
         $("#showdown_cue").hide();
+
+        Sound.whistle_off();
 
         const roundNumSpan = $('#roundNum');
         const roundWinnerSpan = $('#roundWinner');
@@ -230,7 +242,7 @@ const UI = (function() {
     // This function initializes the UI
     const initialize = function() {
         // Initialize the components
-        const components = [Player, Desperado];
+        const components = [Player, Desperado, Sound, Cowboy, Desperado, Heart];
         for (const component of components) {
             component.initialize();
         }
