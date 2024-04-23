@@ -123,7 +123,7 @@ const Socket = (function() {
 
                 const timeStat = JSON.parse(timeList);
                 const kdaStat = JSON.parse(kdaList);
-                GameScreen.displayGameStat(kdaStat, timeStat);
+                GameScreen.displayGameStat(kdaStat, timeStat, socketId, winnerId);
             }
         })
     };

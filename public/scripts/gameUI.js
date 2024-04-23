@@ -188,9 +188,47 @@ const GameScreen = (function() {
         victoryDiv.show()
     }
 
-    const displayGameStat = function(kdaStat, timeStat) {
+    const gameWin = function() {
+        // display gamewin
+    }
+
+    const gameLost = function() {
+        // display Gameover by adding <div> </div>
+    }
+
+    const displayGameStat = function(kdaStat, timeStat, socketId, winnerId) {
+        setTimeout(() => {
+            $('#game-stats-modal').show();
+        }, 2000);
+        console.log(socketId, winnerId);
+        console.log(kdaStat);
         // display stats
-        
+        if (socketId !== winnerId) {    // won TODO: currently socketId winnerId don't match
+            $("#won-lost-indicator").text("You won");
+        } else {                        // lost
+            $("#won-lost-indicator").text("You lost");
+        }
+
+        let kdaData = kdaStat.socketId.value;
+        $("#you-kill").text(kdaData.kill);
+        $("#other-kill").text(kdaData.death);
+
+        let youSum = 0;
+        let otherSum = 0;
+        let totalRound = 0;
+        Object.entries(timeStat).forEach(([_,value]) => {
+            totalRound++;
+            Object.entries(value).forEach(([id,rt]) => {
+                if (id === socketId) {
+                    youSum += rt;
+                } else {
+                    otherSum += rt;
+                }
+            });
+        });
+
+        $("#you-rt").text(youSum/totalRound);
+        $("#other-rt").text(otherSum/totalRound);
     }
 
 
