@@ -93,31 +93,26 @@
 
         <div class="bigger-font"  id="victory" style="display: none;">Winner of Round <span id="roundNum"></span>: <span id="roundWinner"></span></div>
 
-    </div>
+    
         
         <div id="game-stats-modal" class="modal">
             <div class="modal-content">
-                <h2>Player A won the game</h2>
+                <h2 id="won-lost-indicator">You won</h2>
                 <table>
                     <tr>
                         <td>Player</td>
-                        <td>A</td>
-                        <td>B</td>
-                    </tr>
-                    <tr>
-                        <td>Rank</td>
-                        <td>2,1</td>
-                        <td>2,2</td>
+                        <td>You</td>
+                        <td>Opponent</td>
                     </tr>
                     <tr>
                         <td>Kill/Death</td>
-                        <td>2,4</td>
-                        <td>3,1</td>
+                        <td id="you-kill"></td>
+                        <td id="other-kill"></td>
                     </tr>
                     <tr>
                         <td>Average reaction time</td>
-                        <td>3,3</td>
-                        <td>3,4</td>
+                        <td id="you-rt"></td>
+                        <td id="other-rt"></td>
                     </tr>
                 </table>
                 <div class="buttons">

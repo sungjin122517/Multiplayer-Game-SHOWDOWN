@@ -488,6 +488,7 @@ async function executeCountdown() {
 async function roundEnd(time) {
     await countdown(time);
     console.log('Computed winner for %d seconds', time/1000);
+    console.log(kdaStatList);
 
     io.emit("round result", JSON.stringify(Array.from(readyUsersSet)), roundWinner, JSON.stringify(gameUsersHealth), numberOfRounds);
     readyUsersSet.clear();
