@@ -162,6 +162,77 @@ function hideReplayLoading() {
     clearInterval(replayLoadingInterval);
 }
 
+function startGame() {
+    console.log("Game started");
+
+    $(function() {
+        /* Get the canvas and 2D context */
+        const cv = $("#game-canvas").get(0);
+        const context = cv.getContext("2d");
+
+        UI.initialize();
+        console.log('UI initialized')
+
+        /* Draw the cloud */
+        const cloud1 = new Image();
+        cloud1.src = "src/img/cloud1.png";
+        const cloud2 = new Image();
+        cloud2.src = "src/img/cloud2.png";
+
+        var cloud1_x = cv.width;
+        var cloud2_x = cv.width + 200;
+        var cloud1Speed = 1;
+        var cloud2Speed = 0.8;
+        var startTime = null;
+
+        /* Create the game loop */
+        function doFrame(now) {
+            // console.log('game loop')
+
+            if (!startTime) {
+                startTime = now;
+            }
+            var elapsed = now - startTime;
+
+            cloud1_x -= cloud1Speed;
+            if (cloud1_x < -cloud1.width) {
+                cloud1_x = cv.width;
+            }
+
+            if (elapsed > 3000) {
+                cloud2_x -= cloud2Speed;
+                if (cloud2_x < -cloud2.width) {
+                    cloud2_x = cv.width;
+                }
+            }
+
+            /* Clear the screen */
+            context.clearRect(0, 0, cv.width, cv.height);
+
+            /* Draw the cloud */
+            context.drawImage(cloud1, cloud1_x, 10, 50, 15);
+            context.drawImage(cloud2, cloud2_x, 30, 50, 15);
+
+
+            /* Draw the sprites */
+            Player.getSprite().draw();
+            // Desperado.getSprite().draw();
+
+            /* Update the sprites */
+            Player.update(now);
+            // Desperado.update(now);
+
+            requestAnimationFrame(doFrame);
+
+
+
+        }
+
+        requestAnimationFrame(doFrame);
+
+    })
+}
+
 // Update online users every 500 ms.
 setInterval(() => {
     fetch('/get-users')

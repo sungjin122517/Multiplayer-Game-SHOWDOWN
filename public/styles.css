@@ -12,6 +12,13 @@ body, html {
     background-size: cover;
 }
 
+#game-canvas {
+    width: 100%;
+    height: 100%;
+    background-image: url(src/img/background_game.png);
+    background-size: cover;
+}
+
 .container {
     min-width: 25%;
     min-height: 25%;
@@ -176,6 +183,8 @@ a {
 
 #game-page {
     display: none;
+    width: 100%;
+    height: 100%;
 }
 
 #signed-in-page {

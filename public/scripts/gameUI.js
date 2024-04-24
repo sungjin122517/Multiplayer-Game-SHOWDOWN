@@ -6,20 +6,44 @@
 
 
 const Player = (function() {
+    const sequences = {
+        play: { x: 0, y: 0, width: 64, height: 64, count: 4, timing: 200, loop: true },
+        reload: { x: 0, y: 64, width: 64, height: 64, count: 6, timing: 200, loop: false },
+        shoot: { x: 0, y: 128, width: 64, height: 64, count: 3, timing: 200, loop: false },
+        die: { x: 0, y: 192, width: 64, height: 64, count: 5, timing: 200, loop: false },
+        stop: { x: 0, y: 0, width: 64, height: 64, count: 1, timing: 200, loop: false }
+    }
+
+    const ctx = $("#game-canvas").get(0).getContext("2d");
+    const sprite = Sprite(ctx, 600, 350);
+
+    const getSprite = function() {
+        return sprite;
+    }
+
+    const initialize = function() {
+        sprite.setSequence(sequences.play)
+            .useSheet("../src/img/cowboy_sprite.png");
+        sprite.draw();
+    };
+
     const play = function() {
         // Default animation, make Cowboy visible and play animation
         // Cowboy.play();
+        sprite.setSequence(sequences.idle);
     }
 
     const reload = function() {
         // Stop player animation and play reloading animation
         // Cowboy.reload();
+        sprite.setSequence(sequences.reload);
     }
 
     const shoot = function() {
         // Player shoot animation
         // Cowboy.shoot();
         // Sound.shoot();
+        sprite.setSequence(sequences.shoot);
     }
 
     const damaged = function(hp) {
@@ -30,6 +54,37 @@ const Player = (function() {
         }, 2000);
 
         // Cowboy.damaged(); //animation damage
+        // image will blink and move left and right
+        let moveDist = 10;
+        let direction = 1 // 1 for right, -1 for left
+        const intervalTime = 200;
+        const damageDuration = 2000;
+        const startTime = Date.now();
+        const originalX = sprite.getXY().x;
+        const originalY = sprite.getXY().y;
+
+        sprite.setVisible(true);
+
+        const interval = setInterval(() => {
+            if (Date.now() - startTime > damageDuration) {
+                clearInterval(interval);
+                sprite.setVisible(false);
+                sprite.setXY(originalX, originalY);
+                return;
+            }
+
+            sprite.setVisible(true);
+
+            const moveX = direction == 1 ? originalX + moveDist : originalX - moveDist;
+            sprite.setXY(moveX, originalY);
+            direction *= 1;
+
+            // make sprite invisible after 100ms
+            setTimeout(() => {
+                sprite.setVisible(false);
+            }, 100);
+        }, intervalTime);
+
         // Heart.damaged('player') Heart icon remove animation
     };
 
@@ -38,28 +93,36 @@ const Player = (function() {
         $('#status').show();
         // Player stun animation
         // Cowboy.stun();
+
+        sprite.setOpacity(0.5);
+        sprite.setSequence(sequences.stop);
+        // setTimeout(() => {
+        //     sprite.setOpacity(1);
+        //     sprite.setSequence(sequences.play);
+        // }, duration);
     };
 
-    const depenalize = function() {
+    const depenalize = function(duration) {
         console.log('your depenalty!');
         $('#status').hide();
+
         // Player stun-animation stop
         // Cowboy.destun();
+        setTimeout(() => {
+            sprite.setOpacity(1);
+            sprite.setSequence(sequences.play);
+        }, duration)
     };
 
     const dead = function() {
         // Cowboy.dead();
+        sprite.setSequence(sequences.die);
     };
 
-    // TODO may be deleted later
-    const initialize = function() {
-        // $(document).on("keydown", function(event) {
-        //     // Key: j
-        //     if (event.keyCode == 74) {
-        //         Socket.pressed_j();
-        //     }
-        // })
-    };
+    const update = function(time) {
+        sprite.update(time);
+    }
+
 
     // constantly detects key press
     const player_key = function() {
@@ -85,26 +148,50 @@ const Player = (function() {
         })
     };
     
-    return {initialize, player_key, play, reload, shoot, damaged, penalize, depenalize, dead};
+    return {initialize, player_key, play, reload, shoot, damaged, penalize, depenalize, dead, update, getSprite};
 })();
 
 const Desperado = (function() {
+    const sequences = {
+        play: { x: 0, y: 256, width: 64, height: 64, count: 4, timing: 200, loop: true },
+        reload: { x: 0, y: 320, width: 64, height: 64, count: 6, timing: 200, loop: false },
+        shoot: { x: 0, y: 384, width: 64, height: 64, count: 3, timing: 200, loop: false },
+        die: { x: 0, y: 448, width: 64, height: 64, count: 5, timing: 200, loop: false },
+    }
+
+    const ctx = $("#game-canvas").get(0).getContext("2d");
+    const sprite = Sprite(ctx, 200, 350);
+    // sprite.setSequence(sequences.play)
+    //         .useSheet("../src/img/cowboy_sprite.png");
+
+
+    const getSprite = function() {
+        return sprite;
+    }
+
     const initialize = function() {
+        // sprite = Sprite(ctx, 600, 350);
+        sprite.setSequence(sequences.play)
+            .useSheet("../src/img/cowboy_sprite.png");
+        sprite.draw();
     }
 
     const play = function() {
         // Default animation, make opponent visible and play animation
         // Desperado.play();
+        sprite.setSequence(sequences.play);
     }
 
     const reload = function() {
         // Stop opponent animation and play reloading animation
         // Desperado.reload();
+        sprite.setSequence(sequences.reload);
     }
 
     const shoot = function() {
         // Player shoot animation
         // Cowboy.shoot();
+        sprite.setSequence(sequences.shoot);
     }
 
     const damaged = function(hp) {
@@ -115,6 +202,37 @@ const Desperado = (function() {
         }, 2000);
 
         // Desperado.damaged(); //animation damage
+        // image will blink and move left and right
+        let moveDist = 10;
+        let direction = 1 // 1 for right, -1 for left
+        const intervalTime = 200;
+        const damageDuration = 2000;
+        const startTime = Date.now();
+        const originalX = sprite.getXY().x;
+        const originalY = sprite.getXY().y;
+
+        sprite.setVisible(true);
+
+        const interval = setInterval(() => {
+            if (Date.now() - startTime > damageDuration) {
+                clearInterval(interval);
+                sprite.setVisible(false);
+                sprite.setXY(originalX, originalY);
+                return;
+            }
+
+            sprite.setVisible(true);
+
+            const moveX = direction == 1 ? originalX + moveDist : originalX - moveDist;
+            sprite.setXY(moveX, originalY);
+            direction *= 1;
+
+            // make sprite invisible after 100ms
+            setTimeout(() => {
+                sprite.setVisible(false);
+            }, 100);
+        }, intervalTime);
+
         // Heart.damaged('desperado') Heart icon remove animation
     };
 
@@ -123,21 +241,38 @@ const Desperado = (function() {
         $('#desperadoStatus').show();
         // Player stun animation
         // Desperado.stun();
+
+        sprite.setOpacity(0.5);
+        sprite.setSequence(sequences.stop);
+        // setTimeout(() => {
+        //     sprite.setOpacity(1);
+        //     sprite.setSequence(sequences.play);
+        // }, duration);
     };
 
     const depenalize = function() {
         console.log('desperado depenalty!');
         $('#desperadoStatus').hide();
+
         // Player stun-animation stop
         // Desperado.destun();
+        setTimeout(() => {
+            sprite.setOpacity(1);
+            sprite.setSequence(sequences.play);
+        }, duration)
     };
 
     const dead = function() {
         // Cowboy.dead();
+        sprite.setSequence(sequences.die);
     };
 
+    const update = function(time) {
+        sprite.update(time);
+    }
 
-    return {initialize, play, reload, shoot, damaged, penalize, depenalize, dead};
+
+    return {initialize, play, reload, shoot, damaged, penalize, depenalize, dead, update, getSprite};
 })();
 
 const GameScreen = (function() {
@@ -146,6 +281,7 @@ const GameScreen = (function() {
 
     const displayRoundStart = function(roundNum) {
         // Play animation
+        // console.log('display round start')
         Player.play();
         Desperado.play();
         Sound.whistle();
@@ -242,10 +378,13 @@ const UI = (function() {
     // This function initializes the UI
     const initialize = function() {
         // Initialize the components
-        const components = [Player, Cowboy, Desperado, Sound, Heart, GameScreen];
-        for (const component of components) {
-            component.initialize();
-        }
+        Player.initialize();
+        // Desperado.initialize();
+        // const components = [Player, Desperado, Sound, Heart, GameScreen];
+        // for (const component of components) {
+        //     component.initialize();
+        // }
+
     };
 
     return { initialize };

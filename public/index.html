@@ -12,7 +12,8 @@
     <script src="scripts/registration.js" defer></script>
     <script src="scripts/Authentication.js" defer></script>
     <script src="scripts/Sockets.js" defer></script>
-    <script src="scripts/gameUI.js"></script>
+    <script src="scripts/sprite.js" defer></script>
+    <script src="scripts/gameUI.js" defer></script>
     <script src="scripts/Animation.js"></script>
     <script src="scripts/Sound.js"></script>
 </head>
@@ -68,31 +69,32 @@
     </div>
 
     <!-- game screen -->
-    <div class="container" id="game-page">
+    <div id="game-page">
+        <canvas id="game-canvas"></canvas>
+    </div>
+
+
+
         <!-- This div contains all holes -->
-        <div class="bigger-font"  id="game-area">
+        <!-- <div class="bigger-font"  id="game-area">
             Gameplay
         </div>
-        <div class="bigger-font"> Player HP: <span id="playerLife"> 3</span> </div>
+        <div class="bigger-font"> Player HPPPPPP: <span id="playerLife"> 3</span> </div>
         <div class="bigger-font"> Desperado HP: <span id="desperadoLife"> 3 </span> </div>
 
         <div class="bigger-font"  id="roundStart" style="display: none;">ROUND <span id="roundNum"></span></div>
-
         
         <div class="bigger-font" id="status" style="display: none;"> STUNNED! </div>
         <div class="bigger-font" id="desperadoStatus" style="display: none;"> Desperado STUNNED! </div>
         <div class="bigger-font"  id="roundWin" style="display: none;"> WIN! </div>
-        <div class="bigger-font"  id="roundLost" style="display: none;"> HURT! </div>
-        
+        <div class="bigger-font"  id="roundLost" style="display: none;"> HURT! </div> -->
 
         <!-- <div class="bigger-font" >My life: </div>
         <div class="bigger-font"  id="life">3</div> -->
 
-        <div class="bigger-font"  id="showdown_cue" style="display: none;"> SHOWDOWN! </div>
-        
+        <!-- <div class="bigger-font"  id="showdown_cue" style="display: none;"> SHOWDOWN! </div>
 
-
-        <div class="bigger-font"  id="victory" style="display: none;">Winner of Round <span id="roundNum"></span>: <span id="roundWinner"></span></div>
+        <div class="bigger-font"  id="victory" style="display: none;">Winner of Round <span id="roundNum"></span>: <span id="roundWinner"></span></div> -->
 
     
         

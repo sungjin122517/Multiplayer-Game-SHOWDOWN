@@ -156,6 +156,7 @@ const Socket = (function() {
         // This could also change the client state, e.g., display the game room UI
         pressed_j();
         hideLoading();
+        startGame();
         $("#main-page").hide();
         $("#signed-in-page").hide();
         $("#game-page").show();
