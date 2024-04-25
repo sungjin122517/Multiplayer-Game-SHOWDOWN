@@ -15,7 +15,7 @@ const Sprite = function(ctx, x, y) {
     let index = 0;
 
     // This is the scaling factor for drawing the sprite.
-    let scale = 1;
+    let scale = 0.5;
 
     // This is the updated time of the current sprite image.
     // It is used to determine the timing to switch to the next sprite image.
@@ -23,6 +23,10 @@ const Sprite = function(ctx, x, y) {
 
     let visible = true;
     let opacity = 1;
+
+    const getSequcnce = function() {
+        return sequence;
+    }
 
     // This function uses a new sprite sheet in the image object.
     // - `spriteSheet` - The source of the sprite sheet (URL)
@@ -94,46 +98,40 @@ const Sprite = function(ctx, x, y) {
     }
 
     // This function draws the sprite.
-    const drawSprite = function(flip = false) {
-        /* Save the settings */
-        ctx.save();
-        ctx.globalAlpha = opacity;
-
-        const size = getDisplaySize();
-
-        if (flip) {
-            ctx.scale(-1, 1);
-            ctx.translate(-x*2 - size.width, 0);
-        }
-
-        /* Draw the sprite */
-        ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(
-            sheet,
-            sequence.x + sequence.width * index, 
-            sequence.y,
-            sequence.width, 
-            sequence.height,
-            x, 
-            y,
-            size.width, 
-            size.height
-        );
-
-        ctx.restore();
-    };
-
-    // This function draws the sprite.
     const draw = function(flip = false) {
         if (isReady() && visible) {
-            drawSprite(flip);
+            // drawSprite(flip);
+            ctx.save();
+            ctx.globalAlpha = opacity;
+
+            const size = getDisplaySize();
+
+            if (flip) {
+                ctx.scale(-1, 1);
+                ctx.translate(-x*2 - size.width, 0);
+            }
+
+            /* Draw the sprite */
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(
+                sheet,
+                sequence.x + sequence.width * index, 
+                sequence.y,
+                sequence.width, 
+                sequence.height,
+                x, 
+                y,
+                size.width, 
+                size.height
+            );
+
+            ctx.restore();
         }
         return this;
     }
 
     // This function updates the sprite.
     const update = function(time) {
-        console.log(sequence);
 
         if (lastUpdate == 0) lastUpdate = time;
 
@@ -167,7 +165,8 @@ const Sprite = function(ctx, x, y) {
         update: update,
         move: move,
         setVisible: setVisible,
-        setOpacity: setOpacity
+        setOpacity: setOpacity,
+        getSequence: getSequcnce
     };
 
 }

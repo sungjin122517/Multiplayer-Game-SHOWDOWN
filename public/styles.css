@@ -17,6 +17,8 @@ body, html {
     height: 100%;
     background-image: url(src/img/background_game.png);
     background-size: cover;
+    position: relative;
+    z-index: 1;
 }
 
 .container {
@@ -182,9 +184,72 @@ a {
 
 
 #game-page {
+    position: relative;
     display: none;
     width: 100%;
     height: 100%;
+}
+
+#playerLifeTitle, #desperadoLifeTitle, #roundStart, #status, #desperadoStatus, #roundWin, #roundLost, #showdown_cue, #victory, #pressR, #playerReady{
+    position: relative;
+    z-index: 2;
+    /* font-size: 24px;
+    color: white; */
+}
+
+#playerLifeTitle {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    font-size: 24px;
+}
+
+#desperadoLifeTitle {
+    position: absolute;
+    top: 15px; 
+    right: 25px;
+    font-size: 24px;
+}
+
+#roundStart, #roundWin, #roundLost, #pressR {
+    position: absolute;
+    top: 20px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    font-size: 36px;
+}
+
+#status {
+    position: absolute;
+    top: 33%; 
+    left: 80px; 
+    font-size: 36px;
+    color: red;
+}
+
+#desperadoStatus {
+    position: absolute;
+    top: 33%; 
+    right: 80px; 
+    font-size: 36px;
+    color: red;
+
+}
+
+#showdown_cue {
+    position: absolute;
+    top: 30%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+}
+
+#victory {
+    position: absolute;
+    top: 25%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    font-size: 36px;
 }
 
 #signed-in-page {
@@ -193,8 +258,8 @@ a {
 
 #user-counter {
     position: fixed;
-    top: 50px;
-    right: 50px;
+    top: 90px;
+    right: 25px;
     padding: 10px; 
     background-color: rgba(0, 0, 0, 0.5);
     color: white;

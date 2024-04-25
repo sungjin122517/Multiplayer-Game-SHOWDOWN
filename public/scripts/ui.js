@@ -170,14 +170,14 @@ function startGame() {
         const cv = $("#game-canvas").get(0);
         const context = cv.getContext("2d");
 
-        UI.initialize();
-        console.log('UI initialized')
+        UI.initialize(context);
 
         /* Draw the cloud */
         const cloud1 = new Image();
         cloud1.src = "src/img/cloud1.png";
         const cloud2 = new Image();
         cloud2.src = "src/img/cloud2.png";
+
 
         var cloud1_x = cv.width;
         var cloud2_x = cv.width + 200;
@@ -188,6 +188,11 @@ function startGame() {
         /* Create the game loop */
         function doFrame(now) {
             // console.log('game loop')
+
+            /* Update the sprites */
+            Player.update(now);
+            Desperado.update(now);
+            Horses.update(now);
 
             if (!startTime) {
                 startTime = now;
@@ -213,18 +218,16 @@ function startGame() {
             context.drawImage(cloud1, cloud1_x, 10, 50, 15);
             context.drawImage(cloud2, cloud2_x, 30, 50, 15);
 
+            /* Draw the heart */
+            Heart.initialize(context);
+
 
             /* Draw the sprites */
-            Player.getSprite().draw();
-            // Desperado.getSprite().draw();
-
-            /* Update the sprites */
-            Player.update(now);
-            // Desperado.update(now);
+            Player.draw();
+            Desperado.draw();
+            Horses.draw();
 
             requestAnimationFrame(doFrame);
-
-
 
         }
 
