@@ -15,7 +15,7 @@ const Socket = (function() {
         // Listen for the "Game Start" event
         socket.on('matched', (gameHtml) => {
             // Replace the content with the new game HTML
-            UI.initialize();
+            // UI.initialize();
             enterGameRoom("room");
             // document.open();
             // document.write(gameHtml);
@@ -46,6 +46,7 @@ const Socket = (function() {
          */
         
         socket.on("round start", (playersList, roundNum) => {
+            $("#pressR").hide();
             const socketId = socket.id;
             if (playersList.includes(socketId)) {
                 GameScreen.displayRoundStart(roundNum);
@@ -73,8 +74,12 @@ const Socket = (function() {
                 if (winnerId != socketId) Player.damaged(hpList[socketId]);
                 else Desperado.damaged(desperadoHP);
 
-                
                 GameScreen.displayRoundWinner(winnerId, roundNum);
+
+                pressR = setTimeout(() => {
+                    $("#pressR").text("Press R to start the game");
+                    $("#pressR").show();
+                }, 3000);
             }
         })
 
@@ -93,24 +98,37 @@ const Socket = (function() {
         socket.on("penalize user", (playersList, penaltyUser) => {
             const socketId = socket.id;
             if (playersList.includes(socketId)) {
-                if (penaltyUser == socketId) Player.penalize();
-                else Desperado.penalize();
+                if (penaltyUser == socketId) {
+                    Player.penalize();
+                    Horses.penalizeLeft();
+                }
+                else {
+                    Desperado.penalize();
+                    Horses.penalizeRight();
+                }
             }
         })
         
         socket.on("depenalize user", (playersList, penaltyUser) => {
             const socketId = socket.id;
             if (playersList.includes(socketId)) {
-                if (penaltyUser == socketId) Player.depenalize();
-                else Desperado.depenalize();
+                if (penaltyUser == socketId) {
+                    Player.depenalize();
+                    Horses.depenalizeLeft();
+                } else {
+                    Desperado.depenalize();
+                    Horses.depenalizeRight();
+                }
             }
         })
         
         socket.on("game set", (playersList) => {
             const socketId = socket.id;
             if (playersList.includes(socketId)) {
+                console.log("Game set");
                 Player.play();
                 Desperado.play();
+                Horses.walk();
                 Player.player_key();
             }
         })
@@ -120,6 +138,7 @@ const Socket = (function() {
             if (playersList.includes(socketId)) {
                 if (socketId == winnerId) Desperado.dead();
                 else Player.dead();
+                Sound.gameover();
 
                 const timeStat = JSON.parse(timeList);
                 const kdaStat = JSON.parse(kdaList);
@@ -156,6 +175,7 @@ const Socket = (function() {
         // This could also change the client state, e.g., display the game room UI
         pressed_j();
         hideLoading();
+        startGame();
         $("#main-page").hide();
         $("#signed-in-page").hide();
         $("#game-page").show();
@@ -189,6 +209,7 @@ const Socket = (function() {
 
     const pressed_r = function() {
         socket.emit("ready");
+        $("#pressR").text("Waiting for the Desperado...");
     }
 
     const pressed_j = function() {
