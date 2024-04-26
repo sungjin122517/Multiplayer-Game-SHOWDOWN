@@ -501,14 +501,14 @@ async function roundEnd(time) {
 
     // Check for game end
     for (user in gameUsersHealth) {
-        if (gameUsersHealth[user] == 0) {
-            gameWinner = user;
-            gameEnd();
-        }
+        if (gameUsersHealth[user] == 0) gameEnd();
     }
 }
 
 function gameEnd() {
+    for (user in gameUsersHealth) {
+        if (gameUsersHealth[user] != 0) gameWinner = user;
+    }
     console.log(responseStatList);
     console.log(kdaStatList);
     io.emit("game result", JSON.stringify(Array.from(gameJoinUsersSet)), JSON.stringify(responseStatList), JSON.stringify(kdaStatList), gameWinner);
