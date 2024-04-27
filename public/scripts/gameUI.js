@@ -12,13 +12,24 @@ const Player = (function() {
         shoot: { x: 0, y: 128, width: 64, height: 64, count: 3, timing: 200, loop: false },
         die: { x: 0, y: 192, width: 64, height: 64, count: 5, timing: 200, loop: false },
         stop: { x: 0, y: 0, width: 64, height: 64, count: 1, timing: 200, loop: false }
-    }
+    };
 
     let sprite = null;
 
+    // create enum for the states: play, reload, shoot, die, stop
+    const states = {
+        play: 'play',
+        reload: 'reload',
+        shoot: 'shoot',
+        die: 'die'
+    };
+
+    let state = states.play;
+
+
     const getSprite = function() {
         return sprite;
-    }
+    };
 
     const initialize = function(ctx) {
         sprite = Sprite(ctx, 65, 90);
@@ -30,6 +41,7 @@ const Player = (function() {
         // Default animation, make Cowboy visible and play animation
         // Cowboy.play();
         sprite.setSequence(sequences.play);
+        state = states.play;
     }
 
     const reload = function() {
@@ -38,6 +50,7 @@ const Player = (function() {
         sprite.setSequence(sequences.reload);
         Horses.stop();
         Sound.reload();
+        state = states.reload;
     }
 
     const shoot = function() {
@@ -46,6 +59,7 @@ const Player = (function() {
         // Sound.shoot();
         sprite.setSequence(sequences.shoot);
         Sound.shoot();
+        state = states.shoot;
     }
 
     const damaged = function(hp) {
@@ -113,12 +127,19 @@ const Player = (function() {
         // Cowboy.destun();
 
         sprite.setOpacity(1);
-        sprite.setSequence(sequences.play);
+
+        // console.log('state is: ', state)
+        if (state == states.play) {
+            sprite.setSequence(sequences.play);
+        } else if (state == states.reload) {
+            sprite.setSequence(sequences.reload);
+        }
     };
 
     const dead = function() {
         // Cowboy.dead();
         sprite.setSequence(sequences.die);
+        state = states.die;
     };
 
     const update = function(time) {
@@ -168,6 +189,16 @@ const Desperado = (function() {
 
     let sprite = null;
 
+    // create enum for the states: play, reload, shoot, die, stop
+    const states = {
+        play: 'play',
+        reload: 'reload',
+        shoot: 'shoot',
+        die: 'die',
+        stop: 'stop'
+    };
+
+    let state = states.play;
 
     const getSprite = function() {
         return sprite;
@@ -183,6 +214,7 @@ const Desperado = (function() {
         // Default animation, make opponent visible and play animation
         // Desperado.play();
         sprite.setSequence(sequences.play);
+        state = states.play;
     }
 
     const reload = function() {
@@ -191,6 +223,7 @@ const Desperado = (function() {
         sprite.setSequence(sequences.reload);
         Horses.stop();
         Sound.reload();
+        state = states.reload;
     }
 
     const shoot = function() {
@@ -198,6 +231,7 @@ const Desperado = (function() {
         // Cowboy.shoot();
         sprite.setSequence(sequences.shoot);
         Sound.shoot();
+        state = states.shoot;
     }
 
     const damaged = function(hp) {
@@ -266,12 +300,18 @@ const Desperado = (function() {
         // Desperado.destun();
 
         sprite.setOpacity(1);
-        sprite.setSequence(sequences.play);
+
+        if (state == states.play) {
+            sprite.setSequence(sequences.play);
+        } else if (state == states.reload) {
+            sprite.setSequence(sequences.reload);
+        }
     };
 
     const dead = function() {
         // Cowboy.dead();
         sprite.setSequence(sequences.die);
+        state = states.die;
     };
 
     const update = function(time) {
@@ -396,6 +436,19 @@ const Horses = (function() {
     let spriteLeft = null;
     let spriteRight = null;
 
+    const statesRight = {
+        walk: 'walk',
+        stop: 'stop'
+    }
+
+    const statesLeft = {
+        walk: 'walk',
+        stop: 'stop'
+    }
+
+    stateRight = statesRight.walk;
+    stateLeft = statesLeft.walk;
+
     const initialize = function(ctx) {
         spriteLeft = Sprite(ctx, 20, 90);
         spriteRight = Sprite(ctx, 230, 90);
@@ -409,11 +462,15 @@ const Horses = (function() {
     const walk = function() {
         spriteLeft.setSequence(sequences.left);
         spriteRight.setSequence(sequences.right);
+        stateRight = statesRight.walk;
+        stateLeft = statesLeft.walk;
     }
 
     const stop = function() {  
         spriteLeft.setSequence(sequences.leftStop);
         spriteRight.setSequence(sequences.rightStop);
+        stateRight = statesRight.stop;
+        stateLeft = statesLeft.stop;
     }
 
     const penalizeLeft = function() {
@@ -428,12 +485,20 @@ const Horses = (function() {
 
     const depenalizeLeft = function() {
         spriteLeft.setOpacity(1);
-        spriteLeft.setSequence(sequences.left);
+        if (stateLeft == statesLeft.walk) {
+            spriteLeft.setSequence(sequences.left);
+        } else if (stateLeft == statesLeft.stop) {
+            spriteLeft.setSequence(sequences.leftStop);
+        }
     }
 
     const depenalizeRight = function() {
         spriteRight.setOpacity(1);
-        spriteRight.setSequence(sequences.right);
+        if (stateRight == statesRight.walk) {
+            spriteRight.setSequence(sequences.right);
+        } else if (stateRight == statesRight.stop) {
+            spriteRight.setSequence(sequences.rightStop);
+        }
     }
 
     const update = function(time) {
