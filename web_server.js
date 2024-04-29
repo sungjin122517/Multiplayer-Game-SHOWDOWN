@@ -314,10 +314,24 @@ io.on("connection", (socket) => {
 
         const index = roomVariables.indexOf(room);
         if (index > -1) {
-            roomVariables.push(room);
-        } else {
             roomVariables.splice(index, 1);
-            io.to(room).emit('replay match');
+            io.to(room).emit("replay match");
+            const player1 = socket.id;
+            const player2 = otherSocketId;
+            // io.to(room).emit('matched', room);
+            gameJoinUsersSet.add(player1.id);
+            gameJoinUsersSet.add(player2.id);
+            // io.to(room).emit('matched', 'game.html');
+            // Announce round start to players
+            io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)));
+            gameJoinUsersSet.forEach((x) => {
+                gameUsersHealth[x] = maxUsersLife;
+                penalizedUsers[x] = 0;
+                kdaStatList[x] = {'kill' : 0, 'death' : 0};
+            });
+            console.log(`Matched players in room: ${room}`);
+        } else {
+            roomVariables.push(room);
         }
     });
 

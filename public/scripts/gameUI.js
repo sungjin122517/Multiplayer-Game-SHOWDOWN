@@ -358,9 +358,13 @@ const GameScreen = (function() {
             $("#won-lost-indicator").text("You lost");
         }
 
-        let kdaData = kdaStat.socketId.value;
-        $("#you-kill").text(kdaData.kill);
-        $("#other-kill").text(kdaData.death);
+        Object.entries(kdaStat).forEach(([key,value]) => {
+            if (key === socketId) {
+                $("#you-kill").text(value.kill);
+            } else {
+                $("#other-kill").text(value.kill);
+            }
+        });
 
         let youSum = 0;
         let otherSum = 0;
@@ -376,8 +380,8 @@ const GameScreen = (function() {
             });
         });
 
-        $("#you-rt").text(youSum/totalRound);
-        $("#other-rt").text(otherSum/totalRound);
+        $("#you-rt").text(Math.round(youSum/totalRound) + "ms");
+        $("#other-rt").text(Math.round(otherSum/totalRound) + "ms");
     }
 
 

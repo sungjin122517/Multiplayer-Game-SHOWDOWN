@@ -36,6 +36,11 @@ const Socket = (function() {
         // To be implemented
         socket.on("replay match", (message) => {
             //
+            console.log("Hide replay");
+            $("#game-stats-modal").hide();
+            hideReplayLoading();
+            enterGameRoom("room");
+            
         });
 
         /*****
@@ -180,9 +185,6 @@ const Socket = (function() {
         $("#signed-in-page").hide();
         $("#game-page").show();
         $("#temp-gameroomtext").text(room);
-        // setTimeout(() => {
-        //     $('#game-stats-modal').show();
-        // }, 5000);
     };
 
     const leaveGameRoom = function() {
@@ -196,12 +198,6 @@ const Socket = (function() {
             socket.emit("replay");
         }
     }
-    
-    const replayMatched = () => {
-        hideReplayLoading();
-        $("game-stats-modal").hide();
-    }
-
 
     const pressed = function() {
         socket.emit("player pressed");
@@ -221,5 +217,5 @@ const Socket = (function() {
         socket.emit("cheat mode");
     }
 
-    return { connect, disconnect, enterQueue, leaveQueue, leaveGameRoom, replayGame, replayMatched, pressed, pressed_r, pressed_j, pressed_ctrl_p};
+    return { connect, disconnect, enterQueue, leaveQueue, leaveGameRoom, replayGame, pressed, pressed_r, pressed_j, pressed_ctrl_p};
 })();

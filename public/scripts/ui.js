@@ -108,6 +108,8 @@ $(document).ready(function() {
 function showSignedInPage() {
     $("#main-page").hide();
     $("#game-page").hide();
+    $("#game-stats-modal").hide();
+    hideReplayLoading();
     $("#signed-in-page").show();
 }
 
