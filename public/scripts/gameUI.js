@@ -393,9 +393,9 @@ const GameScreen = (function() {
         console.log(kdaStat);
         // display stats
         if (socketId !== winnerId) {    // won TODO: currently socketId winnerId don't match
-            $("#won-lost-indicator").text("You won");
-        } else {                        // lost
             $("#won-lost-indicator").text("You lost");
+        } else {                        // lost
+            $("#won-lost-indicator").text("You won");
         }
 
         Object.entries(kdaStat).forEach(([key,value]) => {
