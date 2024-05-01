@@ -194,7 +194,7 @@ let roomVariables = [];
 
 // Assume only one gameRoom is made (only two players are)
 let numberOfRounds = 0;
-const maxUsersLife = 3;
+const maxUsersLife = 1;
 
 let isRoundStart = false;
 let allowFire = false;
@@ -206,8 +206,8 @@ const penaltyTime = 2;  // in seconds
 
 // Showdown time calculation: 3 seconds ~ 3+(rangeShowdownTime) seconds
 let showdownTime = null;
-const minShowdownTime = 3;
-const rangeShowdownTime = 5;
+const minShowdownTime = 1;
+const rangeShowdownTime = 1;
 
 
 let roundStartTime;
@@ -319,8 +319,9 @@ io.on("connection", (socket) => {
             const player1 = socket.id;
             const player2 = otherSocketId;
             // io.to(room).emit('matched', room);
-            gameJoinUsersSet.add(player1.id);
-            gameJoinUsersSet.add(player2.id);
+            gameJoinUsersSet.add(player1);
+            gameJoinUsersSet.add(player2);
+            console.log('gamejoinusers set', gameJoinUsersSet);
             // io.to(room).emit('matched', 'game.html');
             // Announce round start to players
             io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)));
@@ -370,19 +371,22 @@ io.on("connection", (socket) => {
 
 
     socket.on("ready", () => {
-        console.log('One player stated ready');
-        readyUsersSet.add(socket.id);
-        console.log(readyUsersSet);
-        console.log(gameJoinUsersSet);
+        console.log('r pressed by: ', socket.id);
+        if (!readyUsersSet.has(socket.id)) {
+            console.log('One player stated ready');
+            readyUsersSet.add(socket.id);
+            console.log(readyUsersSet);
+        }
+        // console.log(gameJoinUsersSet);
         // Start when all players are ready
-        if (readyUsersSet.size == gameJoinUsersSet.size) {
-            numberOfRounds++;
+        if (!isRoundStart && (readyUsersSet.size == gameJoinUsersSet.size)) {
+            console.log('All players are ready: ');
             
+            numberOfRounds++;
             responseStatList[numberOfRounds] = {};
             gameJoinUsersSet.forEach((id)=> {
                 responseStatList[numberOfRounds][id] = null;
             })
-            console.log('All players are ready: ');
             
             // Announce round start to players
             isRoundStart = true;
@@ -534,6 +538,7 @@ function gameEnd() {
     Object.keys(responseStatList).forEach(key => delete responseStatList[key]);
     Object.keys(kdaStatList).forEach(key => delete kdaStatList[key]);
     gameJoinUsersSet.clear();
+    console.log('End of the game@@@@@@');
 }
 
 
