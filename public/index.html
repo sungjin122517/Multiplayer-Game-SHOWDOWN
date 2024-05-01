@@ -18,103 +18,81 @@
     <script src="scripts/Sound.js"></script>
 </head>
 <body>
-    <div id="user-counter">Online users: </div>
+    <div id="game-container">
+        <canvas width="854px" height="480px"></canvas>
 
-    <div class="container" id="main-page">
-        <h1>SHOWDOWN!</h1>
-        <form id="sign-in-form">
-            <input id="sign-in-username" type="text" placeholder="Enter your user name" required>
-            <input id="sign-in-password" type="password" placeholder="Enter your password" required>
-            <div id="sign-in-message" class="warning center"></div>
-            <button type="submit">Sign In</button>
-        </form>
-        <button id="game-instruction-button">Game Instruction</button>
-        <a href="#signup" id="signupLink">Not a user yet? Click here to sign up</a>
-    </div>
+        <div id="user-counter">Online users: </div>
 
-    <div class="container" id="signed-in-page">
-        <h1>SHOWDOWN!</h1>
-        <button id="play-button">Play</button>
-        <button id="sign-out-button">Sign Out</button>
-    </div>
-
-    <!-- Modal for Sign Up -->
-    <div id="sign-up-modal" class="modal">
-        <div class="modal-content">
-            <span id="sign-up-modal-close" class="close">&times;</span>
-            <h2>Sign Up</h2>
-            <form id="sign-up-form">
-                <input id="sign-up-username" type="text" placeholder="Enter your user name" required>
-                <input id="sign-up-password" type="password" placeholder="Enter your password" required>
-                <input id="sign-up-password-confirm" type="password" placeholder="Enter your password again"></input>
-                <button type="submit">Sign Up</button>
-                <div id="sign-up-message" class="warning center"></div>
+        <div class="container" id="main-page">
+            <h1>SHOWDOWN!</h1>
+            <form id="sign-in-form">
+                <input id="sign-in-username" type="text" placeholder="Enter your user name" required>
+                <input id="sign-in-password" type="password" placeholder="Enter your password" required>
+                <div id="sign-in-message" class="warning center"></div>
+                <button type="submit">Sign In</button>
             </form>
+            <button id="game-instruction-button">Game Instruction</button>
+            <a href="#signup" id="signupLink">Not a user yet? Click here to sign up</a>
         </div>
-    </div>
 
-    <!-- Modal for Instructions -->
-    <div id="instruction-modal" class="modal">
-        <div class="modal-content">
-            <span id="instruction-modal-close" class="close">&times;</span>
-            <h2>Instruction</h2>
-            <div>This is instruction</div>
+        <div class="container" id="signed-in-page">
+            <h1>SHOWDOWN!</h1>
+            <button id="play-button">Play</button>
+            <button id="sign-out-button">Sign Out</button>
         </div>
-    </div>
 
-    <!-- loading screen -->
-    <div id="loading">
-        <span id="loading-close" class="close">&times;</span>
-        <div id="loadingText">Finding your opponent.</div>
-    </div>
-
-    <!-- game screen -->
-    <div id="game-page">
-        <canvas id="game-canvas"></canvas>
-
-        <div class="bigger-font" id="playerLifeTitle"> Player HP: <span id="playerLife"> 3</span> </div>
-        <div class="bigger-font" id="desperadoLifeTitle"> Desperado HP: <span id="desperadoLife"> 3 </span> </div>
-
-        <div class="bigger-font" id="pressR"> Press R to start the game </div>
-
-        <div class="bigger-font"  id="roundStart" style="display: none;">ROUND <span id="roundNum"></span></div>
-        
-        <div class="bigger-font" id="status" style="display: none;"> STUNNED! </div>
-        <div class="bigger-font" id="desperadoStatus" style="display: none;"> Desperado STUNNED! </div>
-        <div class="bigger-font"  id="roundWin" style="display: none;"> WIN! </div>
-        <div class="bigger-font"  id="roundLost" style="display: none;"> HURT! </div>
-
-
-        <div class="bigger-font"  id="showdown_cue" style="display: none;"> SHOWDOWN! </div>
-
-        <!-- <div class="bigger-font"  id="victory" style="display: none;">Winner of Round <span id="roundNum"></span>: <span id="roundWinner"></span></div> -->
-    </div>
-
-
-
-        <!-- This div contains all holes -->
-        <!-- <div class="bigger-font"  id="game-area">
-            Gameplay
+        <!-- loading screen -->
+        <div id="loading">
+            <span id="loading-close" class="close">&times;</span>
+            <div id="loadingText">Finding your opponent.</div>
         </div>
-        <div class="bigger-font"> Player HP: <span id="playerLife"> 3</span> </div>
-        <div class="bigger-font"> Desperado HP: <span id="desperadoLife"> 3 </span> </div>
 
-        <div class="bigger-font"  id="roundStart" style="display: none;">ROUND <span id="roundNum"></span></div>
-        
-        <div class="bigger-font" id="status" style="display: none;"> STUNNED! </div>
-        <div class="bigger-font" id="desperadoStatus" style="display: none;"> Desperado STUNNED! </div>
-        <div class="bigger-font"  id="roundWin" style="display: none;"> WIN! </div>
-        <div class="bigger-font"  id="roundLost" style="display: none;"> HURT! </div>
+        <!-- Modal for Sign Up -->
+        <div id="sign-up-modal" class="modal">
+            <div class="modal-content">
+                <span id="sign-up-modal-close" class="close">&times;</span>
+                <h2>Sign Up</h2>
+                <form id="sign-up-form">
+                    <input id="sign-up-username" type="text" placeholder="Enter your user name" required>
+                    <input id="sign-up-password" type="password" placeholder="Enter your password" required>
+                    <input id="sign-up-password-confirm" type="password" placeholder="Enter your password again"></input>
+                    <button type="submit">Sign Up</button>
+                    <div id="sign-up-message" class="warning center"></div>
+                </form>
+            </div>
+        </div>
 
-        <div class="bigger-font" >My life: </div>
-        <div class="bigger-font"  id="life">3</div>
+        <!-- Modal for Instructions -->
+        <div id="instruction-modal" class="modal">
+            <div class="modal-content">
+                <span id="instruction-modal-close" class="close">&times;</span>
+                <h2>Instruction</h2>
+                <div>This is instruction</div>
+            </div>
+        </div>
 
-        <div class="bigger-font"  id="showdown_cue" style="display: none;"> SHOWDOWN! </div>
+        <!-- game screen -->
+        <div id="game-page">
+            <!-- <canvas id="game-canvas"></canvas> -->
 
-        <div class="bigger-font"  id="victory" style="display: none;">Winner of Round <span id="roundNum"></span>: <span id="roundWinner"></span></div> -->
+            <div class="bigger-font" id="playerLifeTitle"> Player HP: <span id="playerLife"> 3</span> </div>
+            <div class="bigger-font" id="desperadoLifeTitle"> Desperado HP: <span id="desperadoLife"> 3 </span> </div>
 
-    
-        
+            <div class="bigger-font" id="pressR"> Press R to start the game </div>
+
+            <div class="bigger-font"  id="roundStart" style="display: none;">ROUND <span id="roundNum"></span></div>
+            
+            <div class="bigger-font" id="status" style="display: none;"> STUNNED! </div>
+            <div class="bigger-font" id="desperadoStatus" style="display: none;"> Desperado STUNNED! </div>
+            <div class="bigger-font"  id="roundWin" style="display: none;"> WIN! </div>
+            <div class="bigger-font"  id="roundLost" style="display: none;"> HURT! </div>
+
+
+            <div class="bigger-font"  id="showdown_cue" style="display: none;"> SHOWDOWN! </div>
+
+            <!-- <div class="bigger-font"  id="victory" style="display: none;">Winner of Round <span id="roundNum"></span>: <span id="roundWinner"></span></div> -->
+        </div>
+
         <div id="game-stats-modal" class="modal">
             <div class="modal-content">
                 <h2 id="won-lost-indicator">You won</h2>
@@ -141,11 +119,11 @@
                 </div>
             </div>
         </div>
+        
         <div id="replay-loading">
             <span id="replay-loading-close" class="close">&times;</span>
             <div id="replay-loadingText">Waiting for your opponent.</div>
         </div>
     </div>
-
 </body>
 </html>

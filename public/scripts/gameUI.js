@@ -32,7 +32,7 @@ const Player = (function() {
     };
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 65, 90);
+        sprite = Sprite(ctx, 200, 300);
         sprite.setSequence(sequences.play)
             .useSheet("../src/img/cowboy_sprite.png");
     };
@@ -205,7 +205,7 @@ const Desperado = (function() {
     }
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 200, 90);
+        sprite = Sprite(ctx, 600, 300);
         sprite.setSequence(sequences.play)
             .useSheet("../src/img/cowboy_sprite.png");
     }
@@ -454,8 +454,8 @@ const Horses = (function() {
     stateLeft = statesLeft.walk;
 
     const initialize = function(ctx) {
-        spriteLeft = Sprite(ctx, 20, 90);
-        spriteRight = Sprite(ctx, 230, 90);
+        spriteLeft = Sprite(ctx, 100, 300);
+        spriteRight = Sprite(ctx, 700, 300);
 
         spriteLeft.setSequence(sequences.left)
             .useSheet("../src/img/horse_sprite.png");
@@ -527,19 +527,19 @@ const Heart = (function() {
     heart_empty.src = "../src/img/heart_empty.png";
 
     const heartSettings = {
-        player: { x: 10, y: 15, hearts: [heart, heart, heart] },
-        desperado: { x: 280, y: 15, hearts: [heart, heart, heart] }
+        player: { x: 25, y: 50, hearts: [heart, heart, heart] },
+        desperado: { x: 800, y: 50, hearts: [heart, heart, heart] }
     }
 
     const initialize = function(ctx) {
         // Draw 3 hearts for player on the top left of the screen
         heartSettings.player.hearts.forEach((heart, idx) => {
-            ctx.drawImage(heart, heartSettings.player.x + idx * 15, heartSettings.player.y, 10, 10);
+            ctx.drawImage(heart, heartSettings.player.x + idx * 40, heartSettings.player.y, 30, 30);
         });
 
         // Draw 3 hearts for desperado on the top right of the screen
         heartSettings.desperado.hearts.forEach((heart, idx) => {
-            ctx.drawImage(heart, heartSettings.desperado.x - idx * 15, heartSettings.desperado.y, 10, 10);
+            ctx.drawImage(heart, heartSettings.desperado.x - idx * 40, heartSettings.desperado.y, 30, 30);
         });
     }
 
@@ -557,6 +557,42 @@ const Heart = (function() {
     }
 
     return {initialize, damaged};
+})();
+
+const Tumbleweed = (function() {
+    const sequences = {
+        tumble: { x: 0, y: 0, width: 320, height: 380, count: 4, timing: 200, loop: true }
+    }
+
+    let sprite = null;
+    let x = 0;
+    let speed = 1.2;
+
+    const initialize = function(ctx, startX) {
+        sprite = Sprite(ctx, 400, 400);
+        sprite.setScale(0.1)
+        sprite.setSequence(sequences.tumble)
+            .useSheet("../src/img/tumbleweed.png");
+        x = startX;
+    }
+
+    const update = function(time, cvWidth) {
+        sprite.update(time);
+
+        x -= speed;
+
+        if (x < -sprite.getDisplaySize().width) {
+            x = cvWidth;
+        }
+        
+        sprite.setXY(x, 300);
+    }
+
+    const draw = function() {
+        sprite.draw();
+    }
+
+    return {initialize, update, draw};
 })();
 
 const Sound = (function() {
@@ -613,10 +649,11 @@ const UI = (function() {
     const initialize = function(ctx) {
         console.log('UI initialized')
         // Initialize the components
-        const components = [Player, Desperado, Horses, Heart, GameScreen, Sound];
+        const components = [Player, Desperado, GameScreen, Horses, Heart, Sound];
         for (const component of components) {
             component.initialize(ctx);
         }
+        Tumbleweed.initialize(ctx, 854)
 
     };
 

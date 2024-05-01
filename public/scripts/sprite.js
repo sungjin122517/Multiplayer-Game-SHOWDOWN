@@ -15,7 +15,7 @@ const Sprite = function(ctx, x, y) {
     let index = 0;
 
     // This is the scaling factor for drawing the sprite.
-    let scale = 0.5;
+    let scale = 1;
 
     // This is the updated time of the current sprite image.
     // It is used to determine the timing to switch to the next sprite image.
