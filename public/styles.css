@@ -205,6 +205,13 @@ a {
     font-size: 36px;
 }
 
+#cheatTitle {
+    position: absolute;
+    top: 65px; /* Adjust the value as needed */
+    left: 25px;
+    font-size: 24px; /* Adjust the font size as needed */
+}
+
 #desperadoLifeTitle {
     position: absolute;
     top: 15px; 
