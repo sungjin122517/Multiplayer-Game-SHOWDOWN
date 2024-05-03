@@ -329,6 +329,12 @@ const Desperado = (function() {
 const GameScreen = (function() {
     const initialize = function() {};
 
+    const initHP = function(maxHp) {
+        $('#playerLife').text(maxHp);
+        $('#desperadoLife').text(maxHp);
+        // Heart Reset (maybe everything except GameScreen)
+        // Heart.initialize(); <- This makes infinite error
+    }
 
     const displayRoundStart = function(roundNum) {
         // Play animation
@@ -425,7 +431,7 @@ const GameScreen = (function() {
     }
 
 
-    return {initialize, displayShowdown, displayRoundStart, displayRoundWinner, displayGameStat};
+    return {initialize, initHP, displayShowdown, displayRoundStart, displayRoundWinner, displayGameStat};
 }
 )();
 

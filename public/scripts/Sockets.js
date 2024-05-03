@@ -117,10 +117,12 @@ const Socket = (function() {
             }
         })
         
-        socket.on("game set", (playersList) => {
+        socket.on("game set", (playersList, maxUsersLife) => {
+            const maxHP = maxUsersLife;
             const socketId = socket.id;
             if (playersList.includes(socketId)) {
                 console.log("Game set");
+                GameScreen.initHP(maxHP);
                 Player.play();
                 Desperado.play();
                 Horses.walk();
