@@ -194,7 +194,7 @@ let roomVariables = [];
 
 // Assume only one gameRoom is made (only two players are)
 let numberOfRounds = 0;
-const maxUsersLife = 1;
+const maxUsersLife = 3;
 
 let isRoundStart = false;
 let allowFire = false;

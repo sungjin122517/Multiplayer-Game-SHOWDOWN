@@ -335,7 +335,7 @@ const GameScreen = (function() {
         $('#playerLife').text(maxHp);
         $('#desperadoLife').text(maxHp);
         // Heart Reset (maybe everything except GameScreen)
-        // Heart.initialize(); <- This makes infinite error
+        Heart.replay() // <- This makes infinite error
     }
 
     const displayRoundStart = function(roundNum) {
@@ -343,7 +343,7 @@ const GameScreen = (function() {
         // console.log('display round start')
         Player.play();
         Desperado.play();
-        Horses.walk();
+        Horses.stop();
         Sound.whistle();
         Tumbleweed.startMoving();
 
@@ -384,6 +384,7 @@ const GameScreen = (function() {
         roundWinnerSpan.text(playerId);
         
         victoryDiv.show()
+        Horses.walk();
     }
 
     const gameWin = function() {
@@ -565,7 +566,12 @@ const Heart = (function() {
         }
     }
 
-    return {initialize, damaged};
+    const replay = function() {
+        heartSettings.player.hearts = [heart, heart, heart];
+        heartSettings.desperado.hearts = [heart, heart, heart];
+    }
+
+    return {initialize, damaged, replay};
 })();
 
 const Tumbleweed = (function() {
