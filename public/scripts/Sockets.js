@@ -2,24 +2,14 @@ const Socket = (function() {
     let socket = null;
 
     const connect = function() {
+        console.log("XXconnectCalledXX");
         socket = io();
         socket.on("connect", () => {
             // Handlers for game-specific events can be setup here if needed
             
         });
-
-        // socket.on("matched", (room) => {
-        //     console.log("You have been matched! Room ID: ", room);
-        //     enterGameRoom(room);
-        // });
-        // Listen for the "Game Start" event
         socket.on('matched', (gameHtml) => {
-            // Replace the content with the new game HTML
-            // UI.initialize();
             enterGameRoom("room");
-            // document.open();
-            // document.write(gameHtml);
-            // document.close();
         });
 
         // Listen for a player disconnection within your game room
@@ -127,10 +117,12 @@ const Socket = (function() {
             }
         })
         
-        socket.on("game set", (playersList) => {
+        socket.on("game set", (playersList, maxUsersLife) => {
+            const maxHP = maxUsersLife;
             const socketId = socket.id;
             if (playersList.includes(socketId)) {
                 console.log("Game set");
+                GameScreen.initHP(maxHP);
                 Player.play();
                 Desperado.play();
                 Horses.walk();
@@ -204,6 +196,7 @@ const Socket = (function() {
     }
 
     const pressed_r = function() {
+        console.log("XX r pressed XX");
         socket.emit("ready");
         $("#pressR").text("Waiting for the Desperado...");
     }
