@@ -336,10 +336,9 @@ const GameScreen = (function() {
         Heart.replay() // <- This makes infinite error
     }
 
-    let isDisplayCheat = false;
-    const displayCheat = function() {
-        console.log('i cheat');
-        $('#cheatTitle').show();
+    const displayCheat = function(isCheatEnabled) {
+        if (isCheatEnabled) $('#cheatTitle').show();
+        else if (!isCheatEnabled) $('#cheatTitle').hide();
     }
 
     const displayRoundStart = function(roundNum) {

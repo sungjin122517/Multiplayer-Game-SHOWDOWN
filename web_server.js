@@ -454,10 +454,12 @@ io.on("connection", (socket) => {
         if (!cheatUsersSet.has(id)) {
             cheatUsersSet.add(id);
             console.log('Player called cheat mode');
+            io.emit("display cheat", JSON.stringify(Array.from(gameJoinUsersSet)), id, true);
         }
         else {
             cheatUsersSet.delete(id);
             console.log('Player exited cheat mode');
+            io.emit("display cheat", JSON.stringify(Array.from(gameJoinUsersSet)), id, false);
         }
     })
 
