@@ -26,4 +26,4 @@ To start the game, run the following command
 
 `Alt+P or OPTION(⌥)+P`: Activate / Deactivate cheat mode*
 
-*Cheat Mode: Removes the penalty for early shooting.
+*Cheat Mode: 1. Deals 3 Damage to Opponent 2. Removes the penalty for early shooting. 
