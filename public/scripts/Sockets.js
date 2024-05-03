@@ -95,11 +95,11 @@ const Socket = (function() {
             if (playersList.includes(socketId)) {
                 if (penaltyUser == socketId) {
                     Player.penalize();
-                    Horses.penalizeLeft();
+                    // Horses.penalizeLeft();
                 }
                 else {
                     Desperado.penalize();
-                    Horses.penalizeRight();
+                    // Horses.penalizeRight();
                 }
             }
         })
@@ -109,10 +109,10 @@ const Socket = (function() {
             if (playersList.includes(socketId)) {
                 if (penaltyUser == socketId) {
                     Player.depenalize();
-                    Horses.depenalizeLeft();
+                    // Horses.depenalizeLeft();
                 } else {
                     Desperado.depenalize();
-                    Horses.depenalizeRight();
+                    // Horses.depenalizeRight();
                 }
             }
         })
