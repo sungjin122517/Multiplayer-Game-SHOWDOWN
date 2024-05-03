@@ -554,10 +554,16 @@ const Heart = (function() {
     const damaged = function(player, hp) {
         // remove a heart from the player or desperado
         if (player == 'player') {
+            if (hp == 0) {
+                heartSettings.player.hearts = [heart_empty, heart_empty, heart_empty];
+            }
             if (hp >= 0 && hp < heartSettings.player.hearts.length) {
                 heartSettings.player.hearts[hp] = heart_empty;
             }
         } else if (player == 'desperado') {
+            if (hp == 0) {
+                heartSettings.desperado.hearts = [heart_empty, heart_empty, heart_empty];
+            }
             if (hp >= 0 && hp < heartSettings.desperado.hearts.length) {
                 heartSettings.desperado.hearts[hp] = heart_empty;
             }
