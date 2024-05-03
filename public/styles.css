@@ -191,7 +191,7 @@ a {
     height: 100%;
 }
 
-#playerLifeTitle, #desperadoLifeTitle, #roundStart, #status, #desperadoStatus, #roundWin, #roundLost, #showdown_cue, #victory, #pressR, #playerReady{
+#playerLifeTitle, #cheatTitle, #desperadoLifeTitle, #roundStart, #status, #desperadoStatus, #roundWin, #roundLost, #showdown_cue, #victory, #pressR, #playerReady{
     position: relative;
     z-index: 2;
     /* font-size: 24px;
@@ -206,6 +206,7 @@ a {
 }
 
 #cheatTitle {
+    color: red;
     position: absolute;
     top: 65px; /* Adjust the value as needed */
     left: 25px;

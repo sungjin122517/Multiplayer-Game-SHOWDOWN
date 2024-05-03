@@ -116,6 +116,11 @@ const Socket = (function() {
                 }
             }
         })
+
+        socket.on("display cheat", (playersList, id, isCheatEnabled) => {
+            const socketId = socket.id;
+            if (playersList.includes(socketId) && (id == socketId)) GameScreen.displayCheat(isCheatEnabled);
+        })
         
         socket.on("game set", (playersList, maxUsersLife) => {
             const maxHP = maxUsersLife;
@@ -188,6 +193,7 @@ const Socket = (function() {
     const replayGame = () => {
         if (socket && socket.connected) {
             socket.emit("replay");
+            GameScreen.displayCheat(false);
         }
     }
 
@@ -208,7 +214,6 @@ const Socket = (function() {
 
     const pressed_alt_p = function() {
         socket.emit("cheat mode");
-        GameScreen.displayCheat();
     }
 
     return { connect, disconnect, enterQueue, leaveQueue, leaveGameRoom, replayGame, pressed, pressed_r, pressed_j, pressed_alt_p};
