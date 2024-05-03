@@ -34,7 +34,6 @@ const Player = (function() {
     const initialize = function(ctx) {
         sprite = Sprite(ctx, 65, 90);
         sprite.setSequence(sequences.play)
-            .setScale(1.25)
             .useSheet("../src/img/cowboy_sprite.png");
     };
 
@@ -208,7 +207,6 @@ const Desperado = (function() {
     const initialize = function(ctx) {
         sprite = Sprite(ctx, 200, 90);
         sprite.setSequence(sequences.play)
-            .setScale(1.25)
             .useSheet("../src/img/cowboy_sprite.png");
     }
 
@@ -588,7 +586,6 @@ const Tumbleweed = (function() {
     const initialize = function(ctx, startX) {
         sprite = Sprite(ctx, 400, y);
         sprite.setSequence(sequences.tumble)
-            .setScale(0.1)
             .useSheet("../src/img/tumbleweed.png")
             .setVisible(false);
         x = startX;
