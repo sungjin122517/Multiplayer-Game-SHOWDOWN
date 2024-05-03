@@ -18,9 +18,6 @@
     <script src="scripts/Sound.js"></script>
 </head>
 <body>
-    <div id="game-container">
-        <canvas width="854px" height="480px"></canvas>
-
         <div id="user-counter">Online users: </div>
 
         <div class="container" id="main-page">
@@ -39,12 +36,6 @@
             <h1>SHOWDOWN!</h1>
             <button id="play-button">Play</button>
             <button id="sign-out-button">Sign Out</button>
-        </div>
-
-        <!-- loading screen -->
-        <div id="loading">
-            <span id="loading-close" class="close">&times;</span>
-            <div id="loadingText">Finding your opponent.</div>
         </div>
 
         <!-- Modal for Sign Up -->
@@ -71,9 +62,15 @@
             </div>
         </div>
 
+    <!-- loading screen -->
+    <div id="loading">
+        <span id="loading-close" class="close">&times;</span>
+        <div id="loadingText">Finding your opponent.</div>
+    </div>
+
         <!-- game screen -->
         <div id="game-page">
-            <!-- <canvas id="game-canvas"></canvas> -->
+        <canvas id="game-canvas"></canvas>
 
             <div class="bigger-font" id="playerLifeTitle"> Player HP: <span id="playerLife"> </span> </div>
             <div class="bigger-font" id="desperadoLifeTitle"> Desperado HP: <span id="desperadoLife"> </span> </div>

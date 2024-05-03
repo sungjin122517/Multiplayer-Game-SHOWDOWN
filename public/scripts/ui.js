@@ -169,7 +169,7 @@ function startGame() {
 
     $(function() {
         /* Get the canvas and 2D context */
-        const cv = $("canvas").get(0);
+        const cv = $("#game-canvas").get(0);
         const context = cv.getContext("2d");
 
         UI.initialize(context);
@@ -218,8 +218,8 @@ function startGame() {
             context.clearRect(0, 0, cv.width, cv.height);
 
             /* Draw the cloud */
-            context.drawImage(cloud1, cloud1_x, 10);
-            context.drawImage(cloud2, cloud2_x, 30);
+            context.drawImage(cloud1, cloud1_x, 10, 50, 15);
+            context.drawImage(cloud2, cloud2_x, 30, 50, 15);
 
             /* Draw the heart */
             Heart.initialize(context);

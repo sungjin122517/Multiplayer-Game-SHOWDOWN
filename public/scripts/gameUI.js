@@ -32,7 +32,7 @@ const Player = (function() {
     };
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 200, 300);
+        sprite = Sprite(ctx, 65, 90);
         sprite.setSequence(sequences.play)
             .useSheet("../src/img/cowboy_sprite.png");
     };
@@ -205,7 +205,7 @@ const Desperado = (function() {
     }
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 600, 300);
+        sprite = Sprite(ctx, 200, 90);
         sprite.setSequence(sequences.play)
             .useSheet("../src/img/cowboy_sprite.png");
     }
@@ -460,8 +460,8 @@ const Horses = (function() {
     stateLeft = statesLeft.walk;
 
     const initialize = function(ctx) {
-        spriteLeft = Sprite(ctx, 100, 300);
-        spriteRight = Sprite(ctx, 700, 300);
+        spriteLeft = Sprite(ctx, 20, 90);
+        spriteRight = Sprite(ctx, 230, 90);
 
         spriteLeft.setSequence(sequences.left)
             .useSheet("../src/img/horse_sprite.png");
@@ -533,19 +533,19 @@ const Heart = (function() {
     heart_empty.src = "../src/img/heart_empty.png";
 
     const heartSettings = {
-        player: { x: 25, y: 50, hearts: [heart, heart, heart] },
-        desperado: { x: 800, y: 50, hearts: [heart, heart, heart] }
+        player: { x: 10, y: 15, hearts: [heart, heart, heart] },
+        desperado: { x: 280, y: 15, hearts: [heart, heart, heart] }
     }
 
     const initialize = function(ctx) {
         // Draw 3 hearts for player on the top left of the screen
         heartSettings.player.hearts.forEach((heart, idx) => {
-            ctx.drawImage(heart, heartSettings.player.x + idx * 40, heartSettings.player.y, 30, 30);
+            ctx.drawImage(heart, heartSettings.player.x + idx * 15, heartSettings.player.y, 10, 10);
         });
 
         // Draw 3 hearts for desperado on the top right of the screen
         heartSettings.desperado.hearts.forEach((heart, idx) => {
-            ctx.drawImage(heart, heartSettings.desperado.x - idx * 40, heartSettings.desperado.y, 30, 30);
+            ctx.drawImage(heart, heartSettings.desperado.x - idx * 15, heartSettings.desperado.y, 10, 10);
         });
     }
 
