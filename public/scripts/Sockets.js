@@ -206,9 +206,9 @@ const Socket = (function() {
         socket.emit("player join");
     }
 
-    const pressed_ctrl_p = function() {
+    const pressed_alt_p = function() {
         socket.emit("cheat mode");
     }
 
-    return { connect, disconnect, enterQueue, leaveQueue, leaveGameRoom, replayGame, pressed, pressed_r, pressed_j, pressed_ctrl_p};
+    return { connect, disconnect, enterQueue, leaveQueue, leaveGameRoom, replayGame, pressed, pressed_r, pressed_j, pressed_alt_p};
 })();

@@ -165,12 +165,12 @@ const Player = (function() {
                 console.log('Ready');
                 Socket.pressed_r();
             }
-            // Key: Ctrl + p
-            var ctrlPressed = event.ctrlKey || event.metaKey; // For Mac Command key compatibility
+            // Key: Alt + p
+            var altPressed = event.altKey;
             var pKeyPressed = event.which === 80; // Key code for "P" key
             
-            if (ctrlPressed && pKeyPressed) {
-                Socket.pressed_ctrl_p();
+            if (altPressed && pKeyPressed) {
+                Socket.pressed_alt_p();
             }
         })
     };
