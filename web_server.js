@@ -427,7 +427,9 @@ io.on("connection", (socket) => {
                         readyUsersSet.forEach((id) => {
                             if (id != roundWinner) roundLoser = id;
                         });
-                        gameUsersHealth[roundLoser]--;
+                        // If not cheat, life -1
+                        if (!cheatUsersSet.has(id)) gameUsersHealth[roundLoser]--;
+                        else if (cheatUsersSet.has(id)) gameUsersHealth[roundLoser] = gameUsersHealth[roundLoser] - 3;
                         kdaStatList[roundWinner]['kill']++;
                         kdaStatList[roundLoser]['death']++;
                         console.log(gameUsersHealth);
@@ -524,7 +526,7 @@ async function roundEnd(time) {
 
     // Check for game end
     for (user in gameUsersHealth) {
-        if (gameUsersHealth[user] == 0) gameEnd();
+        if (gameUsersHealth[user] <= 0) gameEnd();
     }
 }
 
@@ -542,6 +544,7 @@ function gameEnd() {
     Object.keys(gameUsersHealth).forEach(key => delete gameUsersHealth[key]);
     Object.keys(responseStatList).forEach(key => delete responseStatList[key]);
     Object.keys(kdaStatList).forEach(key => delete kdaStatList[key]);
+    cheatUsersSet.clear();
     gameJoinUsersSet.clear();
     console.log('End of the game@@@@@@');
 }
