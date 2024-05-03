@@ -247,7 +247,7 @@ io.on("connection", (socket) => {
             gameJoinUsersSet.add(player2.id);
             io.to(room).emit('matched', 'game.html');
             // Announce round start to players
-            io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)));
+            io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)), maxUsersLife);
             gameJoinUsersSet.forEach((x) => {
                 gameUsersHealth[x] = maxUsersLife;
                 penalizedUsers[x] = 0;
@@ -324,7 +324,7 @@ io.on("connection", (socket) => {
             console.log('gamejoinusers set', gameJoinUsersSet);
             // io.to(room).emit('matched', 'game.html');
             // Announce round start to players
-            io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)));
+            io.emit("game set", JSON.stringify(Array.from(gameJoinUsersSet)), maxUsersLife);
             gameJoinUsersSet.forEach((x) => {
                 gameUsersHealth[x] = maxUsersLife;
                 penalizedUsers[x] = 0;
