@@ -462,8 +462,8 @@ const Horses = (function() {
     stateLeft = statesLeft.walk;
 
     const initialize = function(ctx) {
-        spriteLeft = Sprite(ctx, 20, 90);
-        spriteRight = Sprite(ctx, 230, 90);
+        spriteLeft = Sprite(ctx, 20, 60);
+        spriteRight = Sprite(ctx, 230, 60);
 
         spriteLeft.setSequence(sequences.left)
             .useSheet("../src/img/horse_sprite.png");
@@ -579,14 +579,15 @@ const Tumbleweed = (function() {
 
     let sprite = null;
     let x = 0;
-    let speed = 1.2;
+    let speed = 0.6;
     let moving = false;
-    const y = 430
+    const y = 125;
 
     const initialize = function(ctx, startX) {
-        sprite = Sprite(ctx, 400, y);
+        sprite = Sprite(ctx, 65, y);
         sprite.setSequence(sequences.tumble)
             .useSheet("../src/img/tumbleweed.png")
+            .setScale(0.05)
             .setVisible(false);
         x = startX;
         speed = 1.2;

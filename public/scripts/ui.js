@@ -183,8 +183,8 @@ function startGame() {
 
         var cloud1_x = cv.width;
         var cloud2_x = cv.width + 200;
-        var cloud1Speed = 0.8;
-        var cloud2Speed = 0.6;
+        var cloud1Speed = 0.6;
+        var cloud2Speed = 0.4;
         var startTime = null;
 
         /* Create the game loop */
