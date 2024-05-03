@@ -336,6 +336,12 @@ const GameScreen = (function() {
         Heart.replay() // <- This makes infinite error
     }
 
+    let isDisplayCheat = false;
+    const displayCheat = function() {
+        console.log('i cheat');
+        $('#cheatTitle').show();
+    }
+
     const displayRoundStart = function(roundNum) {
         // Play animation
         // console.log('display round start')
@@ -433,7 +439,7 @@ const GameScreen = (function() {
     }
 
 
-    return {initialize, initHP, displayShowdown, displayRoundStart, displayRoundWinner, displayGameStat};
+    return {initialize, initHP, displayCheat, displayShowdown, displayRoundStart, displayRoundWinner, displayGameStat};
 }
 )();
 
