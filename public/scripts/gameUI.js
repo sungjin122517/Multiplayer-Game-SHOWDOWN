@@ -32,8 +32,9 @@ const Player = (function() {
     };
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 200, 300);
+        sprite = Sprite(ctx, 200, 330);
         sprite.setSequence(sequences.play)
+            .setScale(1.25)
             .useSheet("../src/img/cowboy_sprite.png");
     };
 
@@ -48,7 +49,7 @@ const Player = (function() {
         // Stop player animation and play reloading animation
         // Cowboy.reload();
         sprite.setSequence(sequences.reload);
-        Horses.stop();
+        // Horses.stop();
         Sound.reload();
         state = states.reload;
     }
@@ -88,7 +89,7 @@ const Player = (function() {
                 sprite.setVisible(true);
                 sprite.setXY(originalX, originalY);
                 sprite.setSequence(sequences.stop);
-                Horses.stop();
+                // Horses.stop();
                 return;
             }
 
@@ -205,8 +206,9 @@ const Desperado = (function() {
     }
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 600, 300);
+        sprite = Sprite(ctx, 570, 330);
         sprite.setSequence(sequences.play)
+            .setScale(1.25)
             .useSheet("../src/img/cowboy_sprite.png");
     }
 
@@ -221,7 +223,7 @@ const Desperado = (function() {
         // Stop opponent animation and play reloading animation
         // Desperado.reload();
         sprite.setSequence(sequences.reload);
-        Horses.stop();
+        // Horses.stop();
         Sound.reload();
         state = states.reload;
     }
@@ -258,7 +260,7 @@ const Desperado = (function() {
                 sprite.setVisible(true);
                 sprite.setXY(originalX, originalY);
                 sprite.setSequence(sequences.stop);
-                Horses.stop();
+                // Horses.stop();
                 return;
             }
 
@@ -337,6 +339,7 @@ const GameScreen = (function() {
         Desperado.play();
         Horses.walk();
         Sound.whistle();
+        Tumbleweed.startMoving();
 
         $('#victory').hide();
 
@@ -454,8 +457,8 @@ const Horses = (function() {
     stateLeft = statesLeft.walk;
 
     const initialize = function(ctx) {
-        spriteLeft = Sprite(ctx, 100, 300);
-        spriteRight = Sprite(ctx, 700, 300);
+        spriteLeft = Sprite(ctx, 50, 250);
+        spriteRight = Sprite(ctx, 700, 250);
 
         spriteLeft.setSequence(sequences.left)
             .useSheet("../src/img/horse_sprite.png");
@@ -567,32 +570,45 @@ const Tumbleweed = (function() {
     let sprite = null;
     let x = 0;
     let speed = 1.2;
+    let moving = false;
+    const y = 430
 
     const initialize = function(ctx, startX) {
-        sprite = Sprite(ctx, 400, 400);
-        sprite.setScale(0.1)
+        sprite = Sprite(ctx, 400, y);
         sprite.setSequence(sequences.tumble)
-            .useSheet("../src/img/tumbleweed.png");
+            .setScale(0.1)
+            .useSheet("../src/img/tumbleweed.png")
+            .setVisible(false);
         x = startX;
+        speed = 1.2;
     }
 
     const update = function(time, cvWidth) {
+        if (!moving) return;
+
         sprite.update(time);
 
-        x -= speed;
+        x += speed;
 
-        if (x < -sprite.getDisplaySize().width) {
-            x = cvWidth;
+        if (x > cvWidth) {
+            x = -sprite.getDisplaySize().width;
+            moving = false;
         }
         
-        sprite.setXY(x, 300);
+        sprite.setXY(x, y);
     }
 
     const draw = function() {
         sprite.draw();
     }
 
-    return {initialize, update, draw};
+    const startMoving = function() {
+        sprite.setVisible(true);
+        speed = 1.2;
+        moving = true;
+    }
+
+    return {initialize, update, draw, startMoving};
 })();
 
 const Sound = (function() {
@@ -653,7 +669,7 @@ const UI = (function() {
         for (const component of components) {
             component.initialize(ctx);
         }
-        Tumbleweed.initialize(ctx, 854)
+        Tumbleweed.initialize(ctx, -50)
 
     };
 
