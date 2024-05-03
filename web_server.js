@@ -206,8 +206,8 @@ const penaltyTime = 2;  // in seconds
 
 // Showdown time calculation: 3 seconds ~ 3+(rangeShowdownTime) seconds
 let showdownTime = null;
-const minShowdownTime = 1;
-const rangeShowdownTime = 1;
+const minShowdownTime = 3;
+const rangeShowdownTime = 5;
 
 
 let roundStartTime;
@@ -449,9 +449,14 @@ io.on("connection", (socket) => {
 
     socket.on("cheat mode", () => {
         const id = socket.id;
-        console.log('Player entered cheat mode');
-        if (!cheatUsersSet.has(id)) cheatUsersSet.add(id);
-        else cheatUsersSet.delete(id);
+        if (!cheatUsersSet.has(id)) {
+            cheatUsersSet.add(id);
+            console.log('Player called cheat mode');
+        }
+        else {
+            cheatUsersSet.delete(id);
+            console.log('Player exited cheat mode');
+        }
     })
 
 

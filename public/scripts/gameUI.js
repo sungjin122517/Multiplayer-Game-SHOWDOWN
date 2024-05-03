@@ -32,7 +32,7 @@ const Player = (function() {
     };
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 200, 330);
+        sprite = Sprite(ctx, 65, 90);
         sprite.setSequence(sequences.play)
             .setScale(1.25)
             .useSheet("../src/img/cowboy_sprite.png");
@@ -166,12 +166,12 @@ const Player = (function() {
                 console.log('Ready');
                 Socket.pressed_r();
             }
-            // Key: Ctrl + p
-            var ctrlPressed = event.ctrlKey || event.metaKey; // For Mac Command key compatibility
+            // Key: Alt + p
+            var altPressed = event.altKey;
             var pKeyPressed = event.which === 80; // Key code for "P" key
             
-            if (ctrlPressed && pKeyPressed) {
-                Socket.pressed_ctrl_p();
+            if (altPressed && pKeyPressed) {
+                Socket.pressed_alt_p();
             }
         })
     };
@@ -206,7 +206,7 @@ const Desperado = (function() {
     }
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 570, 330);
+        sprite = Sprite(ctx, 200, 90);
         sprite.setSequence(sequences.play)
             .setScale(1.25)
             .useSheet("../src/img/cowboy_sprite.png");
@@ -464,8 +464,8 @@ const Horses = (function() {
     stateLeft = statesLeft.walk;
 
     const initialize = function(ctx) {
-        spriteLeft = Sprite(ctx, 50, 250);
-        spriteRight = Sprite(ctx, 700, 250);
+        spriteLeft = Sprite(ctx, 20, 90);
+        spriteRight = Sprite(ctx, 230, 90);
 
         spriteLeft.setSequence(sequences.left)
             .useSheet("../src/img/horse_sprite.png");
@@ -537,19 +537,19 @@ const Heart = (function() {
     heart_empty.src = "../src/img/heart_empty.png";
 
     const heartSettings = {
-        player: { x: 25, y: 50, hearts: [heart, heart, heart] },
-        desperado: { x: 800, y: 50, hearts: [heart, heart, heart] }
+        player: { x: 10, y: 15, hearts: [heart, heart, heart] },
+        desperado: { x: 280, y: 15, hearts: [heart, heart, heart] }
     }
 
     const initialize = function(ctx) {
         // Draw 3 hearts for player on the top left of the screen
         heartSettings.player.hearts.forEach((heart, idx) => {
-            ctx.drawImage(heart, heartSettings.player.x + idx * 40, heartSettings.player.y, 30, 30);
+            ctx.drawImage(heart, heartSettings.player.x + idx * 15, heartSettings.player.y, 10, 10);
         });
 
         // Draw 3 hearts for desperado on the top right of the screen
         heartSettings.desperado.hearts.forEach((heart, idx) => {
-            ctx.drawImage(heart, heartSettings.desperado.x - idx * 40, heartSettings.desperado.y, 30, 30);
+            ctx.drawImage(heart, heartSettings.desperado.x - idx * 15, heartSettings.desperado.y, 10, 10);
         });
     }
 
