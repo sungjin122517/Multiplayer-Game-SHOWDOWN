@@ -155,7 +155,7 @@ const Player = (function() {
     const player_key = function() {
         console.log('play game');
 
-        $(document).on("keydown", function(event) {
+        $(document).off("keydown").on("keydown", function(event) {
             // Key: space
             if (event.keyCode == 32) {
                 Socket.pressed();
