@@ -32,7 +32,7 @@ const Player = (function() {
     };
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 65, 90);
+        sprite = Sprite(ctx, 65, 100);
         sprite.setSequence(sequences.play)
             .useSheet("../src/img/cowboy_sprite.png");
     };
@@ -205,7 +205,7 @@ const Desperado = (function() {
     }
 
     const initialize = function(ctx) {
-        sprite = Sprite(ctx, 200, 90);
+        sprite = Sprite(ctx, 200, 100);
         sprite.setSequence(sequences.play)
             .useSheet("../src/img/cowboy_sprite.png");
     }
@@ -462,8 +462,8 @@ const Horses = (function() {
     stateLeft = statesLeft.walk;
 
     const initialize = function(ctx) {
-        spriteLeft = Sprite(ctx, 20, 60);
-        spriteRight = Sprite(ctx, 230, 60);
+        spriteLeft = Sprite(ctx, 20, 75);
+        spriteRight = Sprite(ctx, 230, 75);
 
         spriteLeft.setSequence(sequences.left)
             .useSheet("../src/img/horse_sprite.png");
